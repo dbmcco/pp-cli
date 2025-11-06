@@ -25,4 +25,9 @@ export class ConfigManager {
       throw error;
     }
   }
+
+  async writeConfig(config: Config): Promise<void> {
+    await fs.mkdir(this.configDir, { recursive: true });
+    await fs.writeFile(this.configPath, JSON.stringify(config, null, 2));
+  }
 }

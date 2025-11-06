@@ -42,4 +42,35 @@ describe('ConfigManager', () => {
       expect(config).toEqual(expectedConfig);
     });
   });
+
+  describe('writeConfig', () => {
+    it('should create config directory if it does not exist', async () => {
+      await fs.rm(testConfigDir, { recursive: true, force: true });
+
+      const config = {
+        apiKey: 'test-key',
+        vaultPath: '/test/path',
+        defaultModel: 'sonar-pro'
+      };
+
+      await configManager.writeConfig(config);
+
+      const exists = await fs.access(testConfigDir).then(() => true).catch(() => false);
+      expect(exists).toBe(true);
+    });
+
+    it('should write config to file', async () => {
+      const config = {
+        apiKey: 'test-key',
+        vaultPath: '/test/path',
+        defaultModel: 'sonar-pro'
+      };
+
+      await configManager.writeConfig(config);
+
+      const configPath = path.join(testConfigDir, 'config.json');
+      const data = await fs.readFile(configPath, 'utf-8');
+      expect(JSON.parse(data)).toEqual(config);
+    });
+  });
 });
