@@ -79,16 +79,22 @@ export async function promptToSave(
   session: InteractiveSession,
   client: PerplexityClient,
   writer: ObsidianWriter,
-  originalQuery: string
+  originalQuery: string,
+  autoSave: boolean = false
 ): Promise<string | null> {
-  const { shouldSave } = await inquirer.prompt([
-    {
-      type: 'confirm',
-      name: 'shouldSave',
-      message: 'Save to vault?',
-      default: true
-    }
-  ]);
+  let shouldSave = autoSave;
+
+  if (!autoSave) {
+    const response = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'shouldSave',
+        message: 'Save to vault?',
+        default: true
+      }
+    ]);
+    shouldSave = response.shouldSave;
+  }
 
   if (!shouldSave) {
     return null;

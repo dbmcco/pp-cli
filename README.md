@@ -55,6 +55,26 @@ In interactive mode:
 - Type `exit` or `quit` to end the session
 - Choose whether to save the full conversation to Obsidian
 
+### Deep Research Mode
+
+Use the `-r` flag for comprehensive research with the `sonar-reasoning` model. In interactive mode with `-r`, conversations are automatically saved to Obsidian:
+
+```bash
+pp -i -r latest advances in quantum computing
+> what are the main challenges
+> which companies are leading
+> exit
+
+Saving research to vault...
+✓ Saved to: 2025-11-06-quantum-computing-advances.md
+```
+
+Research mode provides:
+- More detailed, comprehensive responses
+- Advanced reasoning capabilities
+- Automatic save to Obsidian (when used with `-i`)
+- Better for in-depth analysis and complex topics
+
 ### Obsidian Notes
 
 When you save a conversation, pp-cli creates a markdown note with:
@@ -110,6 +130,8 @@ Config is stored at `~/.config/pp/config.json`
 ```
 pp [query...]              Run a simple search
 pp -i [query...]           Start interactive mode
+pp -r [query...]           Deep research mode with comprehensive analysis
+pp -i -r [query...]        Interactive research mode (auto-saves to Obsidian)
 pp config                  Configure API key and vault path
 pp --version               Show version
 pp --help                  Show help

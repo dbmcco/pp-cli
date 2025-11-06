@@ -20,15 +20,19 @@ export async function runCLI() {
   program
     .argument('[query...]', 'search query')
     .option('-i, --interactive', 'interactive mode with conversation')
-    .action(async (queryParts: string[], options: { interactive?: boolean }) => {
+    .option('-r, --research', 'deep research mode with comprehensive analysis')
+    .action(async (queryParts: string[], options: { interactive?: boolean; research?: boolean }) => {
       const query = queryParts.join(' ');
       try {
         // Load config
         const configManager = new ConfigManager();
         const config = await configManager.getOrSetupConfig();
 
+        // Use research model if -r flag is set
+        const model = options.research ? 'sonar-reasoning' : config.defaultModel;
+
         // Initialize client and writer
-        const client = new PerplexityClient(config.apiKey, config.defaultModel);
+        const client = new PerplexityClient(config.apiKey, model);
         const writer = new ObsidianWriter(config.vaultPath);
 
         if (options.interactive) {
@@ -42,7 +46,12 @@ export async function runCLI() {
             }
           );
 
-          const filename = await promptToSave(session, client, writer, query);
+          // Auto-save for research mode, prompt otherwise
+          if (options.research) {
+            console.log(chalk.yellow('\nSaving research to vault...'));
+          }
+          const filename = await promptToSave(session, client, writer, query, options.research);
+
           if (filename) {
             console.log(chalk.green(`✓ Saved to: ${filename}`));
           }
