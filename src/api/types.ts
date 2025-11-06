@@ -24,5 +24,5 @@ export interface PerplexityResponse {
     message: Message;
     finish_reason: string;
   }>;
-  citations?: Citation[];
+  citations?: string[]; // API returns URLs as strings, not Citation objects
 }

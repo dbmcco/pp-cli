@@ -30,6 +30,23 @@ export class PerplexityClient {
     });
   }
 
+  /**
+   * Transform URL strings into Citation objects with title extracted from URL
+   */
+  private transformCitations(urls: string[]): Citation[] {
+    return urls.map(url => {
+      try {
+        const urlObj = new URL(url);
+        // Extract domain as title (e.g., "en.wikipedia.org")
+        const title = urlObj.hostname.replace('www.', '');
+        return { title, url };
+      } catch {
+        // If URL parsing fails, use the URL itself as title
+        return { title: url, url };
+      }
+    });
+  }
+
   private async retryWithBackoff<T>(
     fn: () => Promise<T>,
     maxRetries: number = 3
@@ -78,9 +95,12 @@ export class PerplexityClient {
 
       const response = await this.client.post<PerplexityResponse>('/chat/completions', request);
 
+      const citationUrls = response.data.citations || [];
+      const citations = this.transformCitations(citationUrls);
+
       return {
         content: response.data.choices[0].message.content,
-        citations: response.data.citations || []
+        citations
       };
     });
   }
@@ -135,7 +155,7 @@ export class PerplexityClient {
 
                 // Extract citations from final message
                 if (parsed.citations) {
-                  citations = parsed.citations;
+                  citations = this.transformCitations(parsed.citations);
                 }
               } catch (e) {
                 // Skip malformed JSON

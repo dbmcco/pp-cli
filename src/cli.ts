@@ -2,23 +2,37 @@
 
 import { Command } from 'commander';
 import chalk from 'chalk';
+import ora from 'ora';
+import * as path from 'path';
+import { promises as fs } from 'fs';
 import { ConfigManager } from './config/manager';
 import { PerplexityClient } from './api/client';
 import { ObsidianWriter } from './obsidian/writer';
 import { startInteractiveSession, promptToSave } from './commands/interactive';
+import { formatResponse, formatCitations } from './utils/format';
 
 export async function runCLI() {
   const program = new Command();
 
   program
     .name('pp')
-    .description('Perplexity CLI search tool')
+    .description('Perplexity CLI search tool - conversational AI-powered search')
     .version('0.1.0');
 
   program
     .argument('[query...]', 'search query')
-    .option('-r, --research', 'deep research mode with comprehensive analysis')
-    .action(async (queryParts: string[], options: { research?: boolean }) => {
+    .option('-r, --research', 'deep research mode with reasoning model')
+    .option('--no-interactive', 'non-interactive mode for scripting (skips follow-up prompts)')
+    .option('--output <format>', 'output format: text (default), json, markdown')
+    .option('--save-to <path>', 'save to specific Obsidian note path (relative to vault)')
+    .option('--append-to <path>', 'append results to existing note (relative to vault)')
+    .action(async (queryParts: string[], options: {
+      research?: boolean;
+      interactive?: boolean;
+      output?: string;
+      saveTo?: string;
+      appendTo?: string;
+    }) => {
       const query = queryParts.join(' ');
       try {
         // Load config
@@ -32,14 +46,82 @@ export async function runCLI() {
         const client = new PerplexityClient(config.apiKey, model);
         const writer = new ObsidianWriter(config.vaultPath);
 
-        // All queries are now interactive
-        const session = await startInteractiveSession(client, query);
+        // Non-interactive mode for scripting
+        if (options.interactive === false) {
+          const spinner = ora({
+            text: options.research ? 'Researching...' : 'Searching...',
+            color: 'cyan',
+            spinner: 'dots'
+          }).start();
 
-        // Prompt to save conversation
-        const filename = await promptToSave(session, client, writer, query);
+          const result = await client.query(query);
+          spinner.stop();
 
-        if (filename) {
-          console.log(chalk.green(`\n✓ Saved to: ${filename}`));
+          // Format output based on --output flag
+          const outputFormat = options.output || 'text';
+
+          if (outputFormat === 'json') {
+            // JSON output for Claude Code to parse
+            console.log(JSON.stringify({
+              query,
+              answer: result.content,
+              citations: result.citations,
+              model
+            }, null, 2));
+          } else if (outputFormat === 'markdown') {
+            // Raw markdown without terminal formatting
+            console.log(result.content);
+            if (result.citations.length > 0) {
+              console.log('\n## Sources\n');
+              result.citations.forEach((c, i) => {
+                console.log(`${i + 1}. [${c.title}](${c.url})`);
+              });
+            }
+          } else {
+            // Default text output with formatting
+            const formatted = formatResponse(result.content);
+            console.log(formatted);
+            if (result.citations.length > 0) {
+              console.log(formatCitations(result.citations));
+            }
+          }
+
+          // Handle save options
+          if (options.saveTo || options.appendTo) {
+            const targetPath = options.saveTo || options.appendTo;
+            const fullPath = path.join(config.vaultPath, targetPath!);
+
+            if (options.appendTo) {
+              // Append to existing note
+              const appendContent = `\n\n---\n\n## Q: ${query}\n\n${result.content}\n`;
+              await fs.appendFile(fullPath, appendContent, 'utf-8');
+              if (!outputFormat || outputFormat === 'text') {
+                console.log(chalk.green(`\n✓ Appended to: ${targetPath}`));
+              }
+            } else {
+              // Save as new note
+              const note = {
+                title: query,
+                query,
+                conversation: [{ question: query, answer: result.content }],
+                citations: result.citations
+              };
+              await writer.writeNote(note, path.basename(targetPath!, '.md'));
+              if (!outputFormat || outputFormat === 'text') {
+                console.log(chalk.green(`\n✓ Saved to: ${targetPath}`));
+              }
+            }
+          }
+        } else {
+          // Interactive mode (default)
+          const session = await startInteractiveSession(client, query);
+
+          // Prompt to save conversation
+          const filename = await promptToSave(session, client, writer, query);
+
+          if (filename) {
+            console.log(chalk.green(`\n✓ Saved to: ${filename}`));
+          }
         }
       } catch (error) {
         console.error(chalk.red('Error:'), (error as Error).message);

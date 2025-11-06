@@ -7,6 +7,7 @@ A conversational command-line interface for Perplexity AI with beautiful termina
 - **Conversational by default** - All queries are interactive with context preservation
 - **Beautiful formatting** - Markdown rendering with syntax highlighting and clickable links
 - **Research mode** - Deep analysis with the `sonar-reasoning` model
+- **Claude Code integration** - Non-interactive mode with JSON/markdown output for programmatic use
 - **Obsidian integration** - Save conversations as formatted markdown notes
 - **Automatic citations** - Clickable source links in your terminal
 - **Smart retry logic** - Handles rate limits and network errors gracefully
@@ -74,6 +75,46 @@ Research mode provides:
 - Better for in-depth analysis and complex topics
 - Same interactive experience with context preservation
 
+### Programmatic Usage (Claude Code Integration)
+
+Use non-interactive mode for scripting and Claude Code integration:
+
+```bash
+# Get JSON output for parsing
+pp --no-interactive "what is rust ownership" --output json
+
+# Get raw markdown
+pp --no-interactive "explain TypeScript generics" --output markdown
+
+# Save to specific Obsidian note
+pp --no-interactive "Node.js advantages" --save-to "dev/nodejs-notes.md"
+
+# Append to existing note
+pp --no-interactive "follow-up question" --append-to "dev/nodejs-notes.md"
+
+# Research mode with JSON output
+pp -r --no-interactive "quantum computing" --output json
+```
+
+**Non-interactive flags:**
+- `--no-interactive` - Skips follow-up prompts (for scripting)
+- `--output <format>` - Choose `text`, `json`, or `markdown`
+- `--save-to <path>` - Save to specific note path (relative to vault)
+- `--append-to <path>` - Append to existing note
+
+**JSON output format:**
+```json
+{
+  "query": "what is rust ownership",
+  "answer": "**Rust ownership** is a compile-time system...",
+  "citations": [
+    "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html",
+    "https://www.w3schools.com/rust/rust_ownership.php"
+  ],
+  "model": "sonar-pro"
+}
+```
+
 ### Obsidian Notes
 
 When you save a conversation, pp-cli creates a markdown note with:
@@ -135,11 +176,15 @@ Config is stored at `~/.config/pp/config.json`
 ## Commands
 
 ```
-pp [query...]              Start interactive conversation
-pp -r [query...]           Deep research mode with reasoning model
-pp config                  Configure API key and vault path
-pp --version               Show version
-pp --help                  Show help
+pp [query...]                           Start interactive conversation
+pp -r [query...]                        Deep research mode with reasoning model
+pp --no-interactive [query...]          Non-interactive mode for scripting
+pp --output <format> [query...]         Choose output format (text|json|markdown)
+pp --save-to <path> [query...]          Save to specific Obsidian note
+pp --append-to <path> [query...]        Append to existing note
+pp config                               Configure API key and vault path
+pp --version                            Show version
+pp --help                               Show help
 ```
 
 ## Examples
@@ -163,6 +208,15 @@ pp -r "latest advances in fusion energy"
 > compare inertial vs magnetic confinement
 > exit
 Save to vault? y
+
+# Non-interactive with JSON output (for Claude Code)
+pp --no-interactive "explain async/await in JavaScript" --output json
+
+# Save directly to specific note
+pp --no-interactive "TypeScript best practices" --save-to "dev/typescript.md"
+
+# Append follow-up to existing note
+pp --no-interactive "advanced TypeScript patterns" --append-to "dev/typescript.md"
 ```
 
 ## Development
