@@ -6,8 +6,9 @@ Automated daily news briefing delivered to your Obsidian vault using Perplexity 
 
 - **Different briefing each day:** Custom focus areas for each day of the week
 - **7-day weather forecast:** Boston, MA weather included in every briefing
+- **Multi-query approach:** Separate queries per section for balanced coverage
 - **Markdown prompts:** Easy to customize and maintain
-- **Research mode:** Uses Perplexity's deep reasoning for comprehensive coverage
+- **Research mode option:** Use deep reasoning for single-query mode
 
 ## Daily Themes
 
@@ -19,17 +20,33 @@ Automated daily news briefing delivered to your Obsidian vault using Perplexity 
 - **Saturday:** Weekend Deep Dive & Analysis (longer format)
 - **Sunday:** Week Ahead Prep & Insights
 
+## Two Approaches
+
+### Multi-Query (Recommended)
+Runs separate queries for each section, giving balanced coverage. Uses `monday-queries.md` format.
+
+**Pros:** Better balance, no section dominates, consistent depth per topic
+**Cons:** Takes longer (multiple API calls), uses more API quota
+
+### Single-Query
+Runs one comprehensive query. Uses `monday.md` format with research mode.
+
+**Pros:** Faster, single API call, deeper reasoning
+**Cons:** Can be unbalanced, one topic may dominate
+
 ## Setup
 
 ### 1. Test the Script
 
-First, test the script manually to ensure it works:
+**Multi-query approach (recommended):**
+```bash
+/Users/braydon/projects/experiments/pp/scripts/multi-query-briefing.py
+```
 
+**Single-query approach:**
 ```bash
 /Users/braydon/projects/experiments/pp/scripts/morning-briefing.sh
 ```
-
-This will generate a briefing and save it to `daily-briefings/YYYY-MM-DD-news-briefing.md` in your Obsidian vault.
 
 ### 2. Set Up Cron Job
 
@@ -39,7 +56,10 @@ To run the briefing automatically every morning at 7:00 AM:
 # Open crontab editor
 crontab -e
 
-# Add this line (press 'i' to insert, then ESC and ':wq' to save):
+# Add this line (multi-query):
+0 7 * * * /Users/braydon/projects/experiments/pp/scripts/multi-query-briefing.py >> /tmp/morning-briefing.log 2>&1
+
+# OR single-query:
 0 7 * * * /Users/braydon/projects/experiments/pp/scripts/morning-briefing.sh >> /tmp/morning-briefing.log 2>&1
 ```
 
