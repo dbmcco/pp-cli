@@ -9,7 +9,7 @@ import { ConfigManager } from './config/manager';
 import { PerplexityClient } from './api/client';
 import { ObsidianWriter } from './obsidian/writer';
 import { startInteractiveSession, promptToSave } from './commands/interactive';
-import { formatResponse, formatCitations } from './utils/format';
+import { formatResponse, formatCitations, extractThinking } from './utils/format';
 
 export async function runCLI() {
   const program = new Command();
@@ -92,8 +92,16 @@ export async function runCLI() {
             const fullPath = path.join(config.vaultPath, targetPath!);
 
             if (options.appendTo) {
-              // Append to existing note
-              const appendContent = `\n\n---\n\n## Q: ${query}\n\n${result.content}\n`;
+              // Append to existing note with thinking at bottom if present
+              const { content, thinking } = extractThinking(result.content);
+
+              let appendContent = `\n\n---\n\n## Q: ${query}\n\n${content}\n`;
+
+              // Add thinking section if present
+              if (thinking) {
+                appendContent += `\n### Reasoning\n\n*Internal reasoning from the AI model:*\n\n${thinking}\n`;
+              }
+
               await fs.appendFile(fullPath, appendContent, 'utf-8');
               if (!outputFormat || outputFormat === 'text') {
                 console.log(chalk.green(`\n✓ Appended to: ${targetPath}`));

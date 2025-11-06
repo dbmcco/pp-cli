@@ -16,6 +16,22 @@ export function stripThinkTags(content: string): string {
 }
 
 /**
+ * Extracts think tags and returns content + thinking separately
+ */
+export function extractThinking(content: string): { content: string; thinking: string | null } {
+  const thinkMatch = content.match(/<think>([\s\S]*?)<\/think>/i);
+
+  if (!thinkMatch) {
+    return { content, thinking: null };
+  }
+
+  const thinking = thinkMatch[1].trim();
+  const cleanedContent = content.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+
+  return { content: cleanedContent, thinking };
+}
+
+/**
  * Makes URLs clickable in terminal (CMD+click to open)
  */
 function makeLinksClickable(content: string): string {

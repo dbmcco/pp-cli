@@ -1,11 +1,13 @@
 // ABOUTME: Markdown formatting for Obsidian notes
 
 import { ObsidianNote } from './types';
+import { extractThinking } from '../utils/format';
 
 export function formatAsMarkdown(note: ObsidianNote): string {
   const now = new Date().toISOString();
 
   const parts: string[] = [];
+  const thinkingParts: Array<{ question: string; thinking: string }> = [];
 
   // Frontmatter
   parts.push('---');
@@ -31,9 +33,17 @@ export function formatAsMarkdown(note: ObsidianNote): string {
     parts.push(`## Q: ${entry.question}`);
     parts.push('');
 
-    // Answer with proper spacing
-    parts.push(entry.answer);
+    // Extract thinking from answer
+    const { content, thinking } = extractThinking(entry.answer);
+
+    // Answer with proper spacing (thinking removed)
+    parts.push(content);
     parts.push('');
+
+    // Collect thinking for bottom section
+    if (thinking) {
+      thinkingParts.push({ question: entry.question, thinking });
+    }
   });
 
   // Citations
@@ -53,6 +63,27 @@ export function formatAsMarkdown(note: ObsidianNote): string {
       parts.push(`${index + 1}. [${citation.title}](${citation.url})`);
     });
     parts.push('');
+  }
+
+  // Reasoning (thinking) section at bottom
+  if (thinkingParts.length > 0) {
+    parts.push('');
+    parts.push('---');
+    parts.push('');
+    parts.push('## Reasoning');
+    parts.push('');
+    parts.push('*Internal reasoning from the AI model:*');
+    parts.push('');
+
+    thinkingParts.forEach((item, index) => {
+      if (index > 0) {
+        parts.push('');
+      }
+      parts.push(`### Re: ${item.question}`);
+      parts.push('');
+      parts.push(item.thinking);
+      parts.push('');
+    });
   }
 
   return parts.join('\n');
