@@ -219,6 +219,73 @@ pp --no-interactive "TypeScript best practices" --save-to "dev/typescript.md"
 pp --no-interactive "advanced TypeScript patterns" --append-to "dev/typescript.md"
 ```
 
+## Automated Morning Briefing
+
+The `scripts/` directory contains an automated morning briefing system that generates personalized news summaries to your Obsidian vault.
+
+### Features
+
+- **Day-specific content** - Different sections for each day of the week (Monday-Sunday)
+- **Intelligence briefing style** - Bulleted headlines with concise summaries
+- **Multi-query approach** - Separate Perplexity queries per section for balanced coverage
+- **Citation management** - Global citation numbering with consolidated references at bottom
+- **Cron-ready** - Wrapper scripts for automated daily execution
+
+### Setup
+
+1. **Configure the query files** - Edit `scripts/prompts/{day}-queries.md` files to customize:
+   - Topics and sections
+   - Location for weather
+   - News sources and balance
+   - Time ranges (THIS WEEK, TODAY, etc.)
+
+2. **Set up cron job** - Run at 5 AM daily:
+   ```bash
+   crontab /tmp/cron_setup.txt
+   ```
+
+   Or manually add to crontab:
+   ```
+   0 5 * * * /Users/braydon/projects/experiments/pp/scripts/run-morning-briefing.sh >> /tmp/morning-briefing.log 2>&1
+   ```
+
+3. **Manual execution** - Test the briefing:
+   ```bash
+   cd /Users/braydon/projects/experiments/pp
+   ./scripts/run-morning-briefing.sh
+   ```
+
+### Day-Specific Sections
+
+- **Monday**: Week Ahead Preview, Weekend Recap, GenAI/LLM, Tech & Business
+- **Tuesday**: Top Headlines, Business & Markets, GenAI/LLM, Tech Industry
+- **Wednesday**: Top Headlines, GenAI Deep Dive (narrative), Tech Industry
+- **Thursday**: Top Headlines, GenAI/LLM, Tech Industry, Electric Vehicles
+- **Friday**: Week in Review, GenAI Weekly Wrap, Hacker News Top Stories
+- **Saturday**: Week in Review, GenAI Deep Dive, Hacker News Weekly, Classical Music
+- **Sunday**: Week Ahead Preview, Weekend Headlines, Classical Music, Markets Preview
+
+### Output
+
+Briefings are saved to your Obsidian vault at:
+```
+/Users/braydon/Obsidian/Bvault/daily-briefings/YYYY-MM-DD-news-briefing.md
+```
+
+Each briefing includes:
+- YAML frontmatter with date and metadata
+- Weather at the top (location-specific)
+- Bulleted sections with bold headlines
+- Consolidated references at the bottom
+
+### Customization
+
+Edit the query files in `scripts/prompts/` to modify:
+- Section topics and focus areas
+- Time ranges and recency requirements
+- Output formatting requirements
+- News source balance and priorities
+
 ## Development
 
 Clone and build from source:
