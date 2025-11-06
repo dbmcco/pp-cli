@@ -31,11 +31,14 @@ export async function runCLI() {
         // Use research model if -r flag is set
         const model = options.research ? 'sonar-reasoning' : config.defaultModel;
 
+        // Research mode always enables interactive
+        const isInteractive = options.interactive || options.research;
+
         // Initialize client and writer
         const client = new PerplexityClient(config.apiKey, model);
         const writer = new ObsidianWriter(config.vaultPath);
 
-        if (options.interactive) {
+        if (isInteractive) {
           // Interactive mode
           const session = await startInteractiveSession(
             client,
