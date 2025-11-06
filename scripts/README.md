@@ -2,6 +2,23 @@
 
 Automated daily news briefing delivered to your Obsidian vault using Perplexity AI.
 
+## Features
+
+- **Different briefing each day:** Custom focus areas for each day of the week
+- **7-day weather forecast:** Boston, MA weather included in every briefing
+- **Markdown prompts:** Easy to customize and maintain
+- **Research mode:** Uses Perplexity's deep reasoning for comprehensive coverage
+
+## Daily Themes
+
+- **Monday:** Week Ahead & Technology Focus
+- **Tuesday:** Business & Markets Deep Dive
+- **Wednesday:** Innovation & Deep Dives
+- **Thursday:** Science & Research Focus
+- **Friday:** Week in Review & Weekend Preview
+- **Saturday:** Weekend Deep Dive & Analysis (longer format)
+- **Sunday:** Week Ahead Prep & Insights
+
 ## Setup
 
 ### 1. Test the Script
@@ -51,40 +68,56 @@ cat /tmp/morning-briefing.log
 
 ## Customization
 
-### Change the Prompt
+### Edit Daily Prompts
 
-Edit `/Users/braydon/projects/experiments/pp/scripts/morning-briefing.sh` and modify the `PROMPT` variable to customize:
-- Topics covered
-- Level of detail
-- Structure and format
-- Word count
+Each day's briefing is controlled by a markdown file in `scripts/prompts/`:
 
-### Change the Save Location
-
-Modify the `VAULT_PATH` variable to save briefings to a different location in your vault:
-
-```bash
-VAULT_PATH="path/to/your/location/${TODAY}-news-briefing.md"
+```
+scripts/prompts/
+├── monday.md      # Week ahead & tech focus
+├── tuesday.md     # Business & markets
+├── wednesday.md   # Innovation deep dives
+├── thursday.md    # Science & research
+├── friday.md      # Week in review
+├── saturday.md    # Deep analysis
+└── sunday.md      # Week ahead prep
 ```
 
-### Add Custom Topics
+**To customize a day's briefing:**
+1. Open the relevant `.md` file
+2. Edit the structure and topics
+3. Adjust word count targets
+4. Add or remove sections
 
-Example custom prompt focusing on specific areas:
+**Example customization** (edit `monday.md`):
+```markdown
+## Weather Forecast
+7-day forecast for Boston, MA
+
+## Crypto & Web3
+Latest developments in blockchain and cryptocurrency
+
+## Your Custom Section
+Whatever topics you want to track
+```
+
+### Change Weather Location
+
+Edit each prompt file and change:
+```markdown
+7-day forecast for Boston, MA
+```
+To your location:
+```markdown
+7-day forecast for San Francisco, CA
+```
+
+### Change Save Location
+
+Modify the `VAULT_PATH` variable in `morning-briefing.sh`:
 
 ```bash
-PROMPT="Generate a morning briefing for ${BRIEFING_DATE} focusing on:
-
-## AI & Machine Learning
-Latest developments in AI, LLMs, and ML research
-
-## Developer Tools
-New tools, frameworks, and developer productivity
-
-## Startup & VC News
-Funding rounds, acquisitions, and startup trends
-
-## Open Source
-Notable open source releases and community news"
+VAULT_PATH="your-folder/${TODAY}-briefing.md"
 ```
 
 ## Troubleshooting
