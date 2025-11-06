@@ -1,0 +1,79 @@
+// ABOUTME: CLI command handling
+
+import { Command } from 'commander';
+import chalk from 'chalk';
+import ora from 'ora';
+import { ConfigManager } from './config/manager';
+import { PerplexityClient } from './api/client';
+import { ObsidianWriter } from './obsidian/writer';
+import { simpleSearch } from './commands/search';
+import { startInteractiveSession, promptToSave } from './commands/interactive';
+
+export async function runCLI() {
+  const program = new Command();
+
+  program
+    .name('pp')
+    .description('Perplexity CLI search tool')
+    .version('0.1.0');
+
+  program
+    .argument('<query>', 'search query')
+    .option('-i, --interactive', 'interactive mode with conversation')
+    .action(async (query: string, options: { interactive?: boolean }) => {
+      try {
+        // Load config
+        const configManager = new ConfigManager();
+        const config = await configManager.getOrSetupConfig();
+
+        // Initialize client and writer
+        const client = new PerplexityClient(config.apiKey, config.defaultModel);
+        const writer = new ObsidianWriter(config.vaultPath);
+
+        if (options.interactive) {
+          // Interactive mode
+          const session = await startInteractiveSession(
+            client,
+            query,
+            (content) => {
+              console.log(chalk.cyan(content));
+              console.log();
+            }
+          );
+
+          const filename = await promptToSave(session, client, writer, query);
+          if (filename) {
+            console.log(chalk.green(`✓ Saved to: ${filename}`));
+          }
+        } else {
+          // Simple search
+          const spinner = ora('Searching...').start();
+          const result = await simpleSearch(client, query);
+          spinner.stop();
+          console.log(result);
+        }
+      } catch (error) {
+        console.error(chalk.red('Error:'), (error as Error).message);
+        process.exit(1);
+      }
+    });
+
+  program
+    .command('config')
+    .description('Configure pp-cli')
+    .action(async () => {
+      try {
+        const configManager = new ConfigManager();
+        const config = await configManager.setupConfig();
+        console.log(chalk.green('✓ Configuration saved'));
+        console.log('API Key:', config.apiKey.substring(0, 10) + '...');
+        console.log('Vault Path:', config.vaultPath);
+        console.log('Model:', config.defaultModel);
+      } catch (error) {
+        console.error(chalk.red('Error:'), (error as Error).message);
+        process.exit(1);
+      }
+    });
+
+  await program.parseAsync(process.argv);
+}

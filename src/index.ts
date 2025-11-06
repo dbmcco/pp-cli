@@ -1,4 +1,9 @@
 #!/usr/bin/env node
 // ABOUTME: CLI entry point for pp-cli
 
-console.log('pp-cli v0.1.0');
+import { runCLI } from './cli';
+
+runCLI().catch((error) => {
+  console.error('Fatal error:', error);
+  process.exit(1);
+});
