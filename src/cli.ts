@@ -42,28 +42,45 @@ export async function runCLI() {
 
         // If no query provided and in interactive mode, prompt for input
         if (!query && options.interactive !== false) {
-          console.log(chalk.cyan('Enter your query (paste anything, then press Enter):'));
+          console.log(chalk.cyan('Paste your text and press Ctrl+D (or Cmd+D) when done:'));
+          console.log(chalk.dim('(Or type/paste a single line and press Enter)'));
           process.stdout.write(chalk.cyan('> '));
 
-          // Use raw stdin reading to avoid readline launching editors
+          // Read from stdin until EOF (Ctrl+D) or double newline
           query = await new Promise<string>((resolve) => {
             let buffer = '';
+            let lastWasNewline = false;
+
             const onData = (chunk: Buffer) => {
               const text = chunk.toString();
-              // Look for newline to indicate end of input
-              if (text.includes('\n')) {
-                process.stdin.removeListener('data', onData);
-                process.stdin.pause();
-                // Get everything up to the first newline
-                const lines = (buffer + text).split('\n');
-                resolve(lines[0].trim());
-              } else {
-                buffer += text;
+              buffer += text;
+
+              // Check if we got a double newline (empty line after content)
+              for (let i = 0; i < text.length; i++) {
+                if (text[i] === '\n') {
+                  if (lastWasNewline && buffer.trim()) {
+                    // Double newline with content = submit
+                    process.stdin.removeListener('data', onData);
+                    process.stdin.removeListener('end', onEnd);
+                    process.stdin.pause();
+                    resolve(buffer.trim());
+                    return;
+                  }
+                  lastWasNewline = true;
+                } else {
+                  lastWasNewline = false;
+                }
               }
+            };
+
+            const onEnd = () => {
+              process.stdin.removeListener('data', onData);
+              resolve(buffer.trim());
             };
 
             process.stdin.setEncoding('utf8');
             process.stdin.on('data', onData);
+            process.stdin.on('end', onEnd);
             process.stdin.resume();
           });
 
