@@ -1,13 +1,14 @@
 # pp-cli
 
-A command-line interface for Perplexity AI with interactive conversations and Obsidian note integration.
+A conversational command-line interface for Perplexity AI with beautiful terminal output and Obsidian note integration.
 
 ## Features
 
-- **Simple searches** - Get instant answers from the command line
-- **Interactive mode** - Have multi-turn conversations with context preservation
+- **Conversational by default** - All queries are interactive with context preservation
+- **Beautiful formatting** - Markdown rendering with syntax highlighting and clickable links
+- **Research mode** - Deep analysis with the `sonar-reasoning` model
 - **Obsidian integration** - Save conversations as formatted markdown notes
-- **Automatic citations** - Sources included when saving to vault
+- **Automatic citations** - Clickable source links in your terminal
 - **Smart retry logic** - Handles rate limits and network errors gracefully
 
 ## Installation
@@ -29,35 +30,34 @@ You'll be prompted for:
 
 ## Usage
 
-### Simple Search
+### Interactive Queries
 
-Get a quick answer without conversation history:
-
-```bash
-pp what is rust ownership
-```
-
-### Interactive Mode
-
-Have a conversation with follow-up questions:
+Every query starts an interactive conversation. Ask your initial question, then follow up:
 
 ```bash
-pp -i explain quantum computing
-> how does it differ from classical computing
-> what are practical applications
+pp rust ownership
+> how does it differ from garbage collection
+> show me an example with a vector
 > exit
 Save to vault? (y/n): y
-✓ Saved to: 2025-11-06-quantum-computing-basics.md
+✓ Saved to: 2025-11-06-rust-ownership-basics.md
 ```
 
-In interactive mode:
-- Each response maintains conversation context
+**Interactive features:**
+- Each response maintains full conversation context
 - Type `exit` or `quit` to end the session
-- Choose whether to save the full conversation to Obsidian
+- Always prompted to save the full conversation to Obsidian
+- Responses stream with beautiful markdown formatting
+- Citations displayed with clickable links
+
+**Note about contractions:** Wrap queries with contractions in quotes:
+```bash
+pp "what's the difference between rust and c++"
+```
 
 ### Deep Research Mode
 
-Use the `-r` flag for comprehensive research with the `sonar-reasoning` model. Research mode is **always interactive** and will prompt to save to Obsidian:
+Use the `-r` flag for comprehensive research with the `sonar-reasoning` model:
 
 ```bash
 pp -r latest advances in quantum computing
@@ -69,10 +69,10 @@ Save to vault? (y/n): y
 ```
 
 Research mode provides:
-- **Automatically enables interactive mode** - no need for `-i`
 - More detailed, comprehensive responses using advanced reasoning
-- Always prompts to save conversation to Obsidian
+- "Thinking deeply..." indicator during processing
 - Better for in-depth analysis and complex topics
+- Same interactive experience with context preservation
 
 ### Obsidian Notes
 
@@ -81,7 +81,7 @@ When you save a conversation, pp-cli creates a markdown note with:
 - **YAML frontmatter** - Timestamp, original query, tags
 - **Q&A format** - Clear question and answer structure
 - **Full conversation** - Every question and response
-- **Sources section** - Citations with links
+- **Sources section** - All citations with clickable links
 
 Example saved note:
 ```markdown
@@ -108,6 +108,14 @@ tags: [perplexity, search]
 - [IBM Quantum](https://quantum-computing.ibm.com)
 ```
 
+## Terminal Features
+
+- **Markdown Rendering** - Headers, lists, code blocks properly formatted
+- **Syntax Highlighting** - Code blocks with language-specific colors
+- **Clickable Links** - CMD+click URLs to open (in supported terminals like iTerm2)
+- **Beautiful Citations** - Numbered sources with clickable links
+- **Progress Indicators** - Visual feedback during processing
+
 ## Configuration
 
 View or update your settings:
@@ -127,9 +135,8 @@ Config is stored at `~/.config/pp/config.json`
 ## Commands
 
 ```
-pp [query...]              Run a simple search
-pp -i [query...]           Start interactive mode
-pp -r [query...]           Deep research mode (always interactive)
+pp [query...]              Start interactive conversation
+pp -r [query...]           Deep research mode with reasoning model
 pp config                  Configure API key and vault path
 pp --version               Show version
 pp --help                  Show help
@@ -138,15 +145,22 @@ pp --help                  Show help
 ## Examples
 
 ```bash
-# Quick facts
+# Quick conversational query
 pp capital of france
+> what about the history
+> exit
 
-# Technical explanations
-pp -i how does rust handle memory
+# Technical deep dive
+pp rust memory management
+> compare to c++ smart pointers
+> show ownership examples
+> exit
+Save to vault? y
 
-# Research with sources
-pp -i latest advances in fusion energy
+# Research mode for complex topics
+pp -r "latest advances in fusion energy"
 > what are the main challenges
+> compare inertial vs magnetic confinement
 > exit
 Save to vault? y
 ```
