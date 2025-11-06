@@ -50,20 +50,21 @@ export async function runCLI() {
             console.log(chalk.green(`\n✓ Saved to: ${filename}`));
           }
         } else {
-          // Simple search with streaming
+          // Simple search
           const spinner = ora({
             text: 'Searching...',
             color: 'cyan',
             spinner: 'dots'
           }).start();
 
-          console.log(); // spacing
+          const result = await simpleSearch(client, query);
           spinner.stop();
 
-          const result = await simpleSearch(client, query);
+          console.log(); // spacing
+          const formatted = formatResponse(result.content);
+          console.log(formatted);
 
           // Show citations if available
-          console.log(); // spacing
           if (result.citations.length > 0) {
             const citationsFormatted = formatCitations(result.citations);
             console.log(citationsFormatted);

@@ -8,8 +8,7 @@ import { Message } from '../api/types';
 import { ObsidianWriter } from '../obsidian/writer';
 import { ObsidianNote, ConversationEntry } from '../obsidian/types';
 import { Citation } from '../api/types';
-import { formatCitations } from '../utils/format';
-import { StreamRenderer } from '../utils/stream';
+import { formatCitations, formatResponse } from '../utils/format';
 
 export interface InteractiveSession {
   conversationHistory: Message[];
@@ -65,51 +64,37 @@ async function handleQuery(
   query: string,
   session: InteractiveSession
 ): Promise<void> {
-  const renderer = new StreamRenderer();
-  let citations: Citation[] = [];
-
   // Show spinner for research model (reasoning takes time)
-  const spinner = client['model'] === 'sonar-reasoning'
-    ? ora({ text: chalk.dim('Thinking deeply...'), color: 'cyan', spinner: 'dots' }).start()
-    : null;
+  const spinner = ora({
+    text: client['model'] === 'sonar-reasoning' ? chalk.dim('Thinking deeply...') : 'Searching...',
+    color: 'cyan',
+    spinner: 'dots'
+  }).start();
 
-  console.log(); // spacing
+  const result = await client.query(query, session.conversationHistory);
 
-  const fullContent = await client.queryStream(
-    query,
-    {
-      onChunk: (chunk: string) => {
-        if (spinner) {
-          spinner.stop();
-          spinner.clear();
-        }
-        renderer.write(chunk);
-      },
-      onComplete: (cites: Citation[]) => {
-        citations = cites;
-      }
-    },
-    session.conversationHistory
-  );
-
-  const cleanedContent = renderer.getFullContent();
+  spinner.stop();
 
   session.conversationHistory.push(
     { role: 'user', content: query },
-    { role: 'assistant', content: cleanedContent }
+    { role: 'assistant', content: result.content }
   );
 
   session.conversationEntries.push({
     question: query,
-    answer: cleanedContent
+    answer: result.content
   });
 
-  session.allCitations.push(...citations);
+  session.allCitations.push(...result.citations);
 
-  // Show citations after streaming completes
+  // Display formatted response
   console.log(); // spacing
-  if (citations.length > 0) {
-    console.log(formatCitations(citations));
+  const formatted = formatResponse(result.content);
+  console.log(formatted);
+
+  // Show citations
+  if (result.citations.length > 0) {
+    console.log(formatCitations(result.citations));
   }
   console.log(); // spacing
 }
