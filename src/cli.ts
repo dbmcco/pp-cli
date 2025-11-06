@@ -42,21 +42,29 @@ export async function runCLI() {
 
         // If no query provided and in interactive mode, prompt for input
         if (!query && options.interactive !== false) {
-          const readline = await import('readline');
-          const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout,
-            terminal: false  // Disable terminal-specific behavior (no vim!)
-          });
-
           console.log(chalk.cyan('Enter your query (paste anything, then press Enter):'));
           process.stdout.write(chalk.cyan('> '));
 
+          // Use raw stdin reading to avoid readline launching editors
           query = await new Promise<string>((resolve) => {
-            rl.once('line', (line) => {
-              rl.close();
-              resolve(line.trim());
-            });
+            let buffer = '';
+            const onData = (chunk: Buffer) => {
+              const text = chunk.toString();
+              // Look for newline to indicate end of input
+              if (text.includes('\n')) {
+                process.stdin.removeListener('data', onData);
+                process.stdin.pause();
+                // Get everything up to the first newline
+                const lines = (buffer + text).split('\n');
+                resolve(lines[0].trim());
+              } else {
+                buffer += text;
+              }
+            };
+
+            process.stdin.setEncoding('utf8');
+            process.stdin.on('data', onData);
+            process.stdin.resume();
           });
 
           if (!query) {
