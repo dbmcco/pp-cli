@@ -95,11 +95,11 @@ export async function runCLI() {
               // Append to existing note with thinking at bottom if present
               const { content, thinking } = extractThinking(result.content);
 
-              let appendContent = `\n\n---\n\n## Q: ${query}\n\n${content}\n`;
+              let appendContent = `\n\n---\n\n# ${query}\n\n${content}\n`;
 
               // Add thinking section if present
               if (thinking) {
-                appendContent += `\n### Reasoning\n\n*Internal reasoning from the AI model:*\n\n${thinking}\n`;
+                appendContent += `\n## Reasoning\n\n*Internal reasoning:*\n\n${thinking}\n`;
               }
 
               await fs.appendFile(fullPath, appendContent, 'utf-8');

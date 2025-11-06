@@ -17,11 +17,7 @@ export function formatAsMarkdown(note: ObsidianNote): string {
   parts.push('---');
   parts.push('');
 
-  // Title
-  parts.push(`# ${note.title}`);
-  parts.push('');
-
-  // Conversation
+  // Conversation (no separate title - use first Q as title)
   note.conversation.forEach((entry, index) => {
     if (index > 0) {
       parts.push('');
@@ -29,14 +25,14 @@ export function formatAsMarkdown(note: ObsidianNote): string {
       parts.push('');
     }
 
-    // Question
-    parts.push(`## Q: ${entry.question}`);
+    // Question as header
+    parts.push(`# ${entry.question}`);
     parts.push('');
 
     // Extract thinking from answer
     const { content, thinking } = extractThinking(entry.answer);
 
-    // Answer with proper spacing (thinking removed)
+    // Answer content (clean markdown without extra formatting)
     parts.push(content);
     parts.push('');
 
