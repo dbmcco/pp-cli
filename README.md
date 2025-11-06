@@ -4,21 +4,23 @@ A conversational command-line interface for Perplexity AI with beautiful termina
 
 ## Features
 
-- **Conversational by default** - All queries are interactive with context preservation
+- **Conversational by default** - Interactive queries with context preservation
 - **Beautiful formatting** - Markdown rendering with syntax highlighting and clickable links
 - **Research mode** - Deep analysis with the `sonar-reasoning` model
-- **Claude Code integration** - Non-interactive mode with JSON/markdown output for programmatic use
 - **Obsidian integration** - Save conversations as formatted markdown notes
-- **Automatic citations** - Clickable source links in your terminal
+- **Automated briefings** - Daily personalized news summaries delivered to your vault
+- **Claude Code integration** - Non-interactive mode with JSON/markdown output for programmatic use
 - **Smart retry logic** - Handles rate limits and network errors gracefully
 
-## Installation
+## Quick Start
+
+### Installation
 
 ```bash
 npm install -g pp-cli
 ```
 
-After installation, configure your API key and vault path:
+### Configuration
 
 ```bash
 pp config
@@ -29,93 +31,75 @@ You'll be prompted for:
 - **Obsidian Vault Path** - Path to your searches directory (e.g., `/Users/you/vault/searches`)
 - **Default Model** - Press Enter for `sonar-pro`
 
-## Usage
+Config is stored at `~/.config/pp/config.json`
 
-### Interactive Queries
-
-Every query starts an interactive conversation. Ask your initial question, then follow up:
+### Basic Usage
 
 ```bash
+# Start a conversation
 pp rust ownership
 > how does it differ from garbage collection
 > show me an example with a vector
 > exit
 Save to vault? (y/n): y
 ✓ Saved to: 2025-11-06-rust-ownership-basics.md
+
+# Deep research mode
+pp -r latest advances in quantum computing
+> what are the main challenges
+> exit
+
+# Non-interactive (for scripts)
+pp --no-interactive "explain async/await" --output json
 ```
 
-**Interactive features:**
-- Each response maintains full conversation context
+## Interactive Mode
+
+Every query starts an interactive conversation where you can ask follow-up questions.
+
+### Features
+
+- Full conversation context preserved across questions
 - Type `exit` or `quit` to end the session
-- Always prompted to save the full conversation to Obsidian
+- Prompted to save the full conversation to Obsidian
 - Responses stream with beautiful markdown formatting
 - Citations displayed with clickable links
+
+### Example
+
+```bash
+pp capital of france
+> what about the history
+> when was the eiffel tower built
+> exit
+Save to vault? y
+```
 
 **Note about contractions:** Wrap queries with contractions in quotes:
 ```bash
 pp "what's the difference between rust and c++"
 ```
 
-### Deep Research Mode
+## Research Mode
 
 Use the `-r` flag for comprehensive research with the `sonar-reasoning` model:
 
 ```bash
-pp -r latest advances in quantum computing
+pp -r "latest advances in fusion energy"
 > what are the main challenges
-> which companies are leading
+> compare inertial vs magnetic confinement
 > exit
-Save to vault? (y/n): y
-✓ Saved to: 2025-11-06-quantum-computing-advances.md
 ```
 
-Research mode provides:
+**Research mode provides:**
 - More detailed, comprehensive responses using advanced reasoning
 - "Thinking deeply..." indicator during processing
 - Better for in-depth analysis and complex topics
 - Same interactive experience with context preservation
 
-### Programmatic Usage (Claude Code Integration)
+## Obsidian Integration
 
-Use non-interactive mode for scripting and Claude Code integration:
-
-```bash
-# Get JSON output for parsing
-pp --no-interactive "what is rust ownership" --output json
-
-# Get raw markdown
-pp --no-interactive "explain TypeScript generics" --output markdown
-
-# Save to specific Obsidian note
-pp --no-interactive "Node.js advantages" --save-to "dev/nodejs-notes.md"
-
-# Append to existing note
-pp --no-interactive "follow-up question" --append-to "dev/nodejs-notes.md"
-
-# Research mode with JSON output
-pp -r --no-interactive "quantum computing" --output json
-```
-
-**Non-interactive flags:**
-- `--no-interactive` - Skips follow-up prompts (for scripting)
-- `--output <format>` - Choose `text`, `json`, or `markdown`
-- `--save-to <path>` - Save to specific note path (relative to vault)
-- `--append-to <path>` - Append to existing note
-
-**JSON output format:**
-```json
-{
-  "query": "what is rust ownership",
-  "answer": "**Rust ownership** is a compile-time system...",
-  "citations": [
-    "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html",
-    "https://www.w3schools.com/rust/rust_ownership.php"
-  ],
-  "model": "sonar-pro"
-}
-```
-
-### Obsidian Notes
+### Saving Conversations
 
 When you save a conversation, pp-cli creates a markdown note with:
 
@@ -124,7 +108,8 @@ When you save a conversation, pp-cli creates a markdown note with:
 - **Full conversation** - Every question and response
 - **Sources section** - All citations with clickable links
 
-Example saved note:
+### Example Note
+
 ```markdown
 ---
 created: 2025-11-06T10:30:00Z
@@ -149,6 +134,130 @@ tags: [perplexity, search]
 - [IBM Quantum](https://quantum-computing.ibm.com)
 ```
 
+### Programmatic Saving
+
+```bash
+# Save to specific note
+pp --no-interactive "TypeScript best practices" --save-to "dev/typescript.md"
+
+# Append to existing note
+pp --no-interactive "advanced TypeScript patterns" --append-to "dev/typescript.md"
+```
+
+## Automated Morning Briefing
+
+Generate personalized daily news summaries automatically to your Obsidian vault.
+
+### What You Get
+
+- **Day-specific content** - Different sections for each day of the week
+- **Intelligence briefing style** - Bulleted headlines with concise summaries
+- **Personalized topics** - GenAI/LLM, tech industry, Hacker News, electric vehicles, classical music
+- **Weather** - Location-specific forecast at the top
+- **Citation management** - Global numbering with consolidated references
+
+### Quick Setup
+
+1. **Test the briefing manually:**
+   ```bash
+   cd /Users/braydon/projects/experiments/pp
+   ./scripts/run-morning-briefing.sh
+   ```
+
+2. **Set up automated daily run (5 AM):**
+   ```bash
+   echo "0 5 * * * /Users/braydon/projects/experiments/pp/scripts/run-morning-briefing.sh >> /tmp/morning-briefing.log 2>&1" | crontab -
+   ```
+
+3. **Verify cron job:**
+   ```bash
+   crontab -l
+   ```
+
+### Daily Content Breakdown
+
+- **Monday**: Week Ahead Preview, Weekend Recap, GenAI/LLM, Tech & Business
+- **Tuesday**: Top Headlines, Business & Markets, GenAI/LLM, Tech Industry
+- **Wednesday**: Top Headlines, GenAI Deep Dive (narrative), Tech Industry
+- **Thursday**: Top Headlines, GenAI/LLM, Tech Industry, Electric Vehicles
+- **Friday**: Week in Review, GenAI Weekly Wrap, Hacker News Top Stories
+- **Saturday**: Week in Review, GenAI Deep Dive, Hacker News Weekly, Classical Music
+- **Sunday**: Week Ahead Preview, Weekend Headlines, Classical Music, Markets Preview
+
+### Output Location
+
+Briefings are saved to: `/Users/braydon/Obsidian/Bvault/daily-briefings/YYYY-MM-DD-news-briefing.md`
+
+Each briefing includes:
+- YAML frontmatter with date and metadata
+- Weather at the top (location-specific)
+- Bulleted sections with bold headlines
+- Consolidated references at the bottom
+
+### Customization
+
+Edit query files in `scripts/prompts/{day}-queries.md` to customize:
+- Section topics and focus areas
+- Location for weather
+- News sources and balance (left/center/right)
+- Time ranges (THIS WEEK, TODAY, etc.)
+- Output formatting requirements
+
+## Programmatic Usage
+
+Use non-interactive mode for scripting and Claude Code integration.
+
+### Output Formats
+
+```bash
+# Get JSON output for parsing
+pp --no-interactive "what is rust ownership" --output json
+
+# Get raw markdown
+pp --no-interactive "explain TypeScript generics" --output markdown
+
+# Get plain text (default)
+pp --no-interactive "Node.js advantages" --output text
+```
+
+### JSON Output Format
+
+```json
+{
+  "query": "what is rust ownership",
+  "answer": "**Rust ownership** is a compile-time system...",
+  "citations": [
+    "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html",
+    "https://www.w3schools.com/rust/rust_ownership.php"
+  ],
+  "model": "sonar-pro"
+}
+```
+
+### Available Flags
+
+- `--no-interactive` - Skips follow-up prompts (for scripting)
+- `--output <format>` - Choose `text`, `json`, or `markdown`
+- `--save-to <path>` - Save to specific note path (relative to vault)
+- `--append-to <path>` - Append to existing note
+- `-r` - Use research mode with `sonar-reasoning` model
+
+### Examples
+
+```bash
+# Non-interactive with JSON output (for Claude Code)
+pp --no-interactive "explain async/await in JavaScript" --output json
+
+# Save directly to specific note
+pp --no-interactive "TypeScript best practices" --save-to "dev/typescript.md"
+
+# Append follow-up to existing note
+pp --no-interactive "advanced TypeScript patterns" --append-to "dev/typescript.md"
+
+# Research mode with JSON output
+pp -r --no-interactive "quantum computing" --output json
+```
+
 ## Terminal Features
 
 - **Markdown Rendering** - Headers, lists, code blocks properly formatted
@@ -157,23 +266,7 @@ tags: [perplexity, search]
 - **Beautiful Citations** - Numbered sources with clickable links
 - **Progress Indicators** - Visual feedback during processing
 
-## Configuration
-
-View or update your settings:
-
-```bash
-pp config
-```
-
-Config is stored at `~/.config/pp/config.json`
-
-## Requirements
-
-- **Node.js** >= 18
-- **Perplexity API key** - Required for all searches
-- **Obsidian vault** - Optional, only needed for saving notes
-
-## Commands
+## Commands Reference
 
 ```
 pp [query...]                           Start interactive conversation
@@ -187,104 +280,11 @@ pp --version                            Show version
 pp --help                               Show help
 ```
 
-## Examples
+## Requirements
 
-```bash
-# Quick conversational query
-pp capital of france
-> what about the history
-> exit
-
-# Technical deep dive
-pp rust memory management
-> compare to c++ smart pointers
-> show ownership examples
-> exit
-Save to vault? y
-
-# Research mode for complex topics
-pp -r "latest advances in fusion energy"
-> what are the main challenges
-> compare inertial vs magnetic confinement
-> exit
-Save to vault? y
-
-# Non-interactive with JSON output (for Claude Code)
-pp --no-interactive "explain async/await in JavaScript" --output json
-
-# Save directly to specific note
-pp --no-interactive "TypeScript best practices" --save-to "dev/typescript.md"
-
-# Append follow-up to existing note
-pp --no-interactive "advanced TypeScript patterns" --append-to "dev/typescript.md"
-```
-
-## Automated Morning Briefing
-
-The `scripts/` directory contains an automated morning briefing system that generates personalized news summaries to your Obsidian vault.
-
-### Features
-
-- **Day-specific content** - Different sections for each day of the week (Monday-Sunday)
-- **Intelligence briefing style** - Bulleted headlines with concise summaries
-- **Multi-query approach** - Separate Perplexity queries per section for balanced coverage
-- **Citation management** - Global citation numbering with consolidated references at bottom
-- **Cron-ready** - Wrapper scripts for automated daily execution
-
-### Setup
-
-1. **Configure the query files** - Edit `scripts/prompts/{day}-queries.md` files to customize:
-   - Topics and sections
-   - Location for weather
-   - News sources and balance
-   - Time ranges (THIS WEEK, TODAY, etc.)
-
-2. **Set up cron job** - Run at 5 AM daily:
-   ```bash
-   crontab /tmp/cron_setup.txt
-   ```
-
-   Or manually add to crontab:
-   ```
-   0 5 * * * /Users/braydon/projects/experiments/pp/scripts/run-morning-briefing.sh >> /tmp/morning-briefing.log 2>&1
-   ```
-
-3. **Manual execution** - Test the briefing:
-   ```bash
-   cd /Users/braydon/projects/experiments/pp
-   ./scripts/run-morning-briefing.sh
-   ```
-
-### Day-Specific Sections
-
-- **Monday**: Week Ahead Preview, Weekend Recap, GenAI/LLM, Tech & Business
-- **Tuesday**: Top Headlines, Business & Markets, GenAI/LLM, Tech Industry
-- **Wednesday**: Top Headlines, GenAI Deep Dive (narrative), Tech Industry
-- **Thursday**: Top Headlines, GenAI/LLM, Tech Industry, Electric Vehicles
-- **Friday**: Week in Review, GenAI Weekly Wrap, Hacker News Top Stories
-- **Saturday**: Week in Review, GenAI Deep Dive, Hacker News Weekly, Classical Music
-- **Sunday**: Week Ahead Preview, Weekend Headlines, Classical Music, Markets Preview
-
-### Output
-
-Briefings are saved to your Obsidian vault at:
-```
-/Users/braydon/Obsidian/Bvault/daily-briefings/YYYY-MM-DD-news-briefing.md
-```
-
-Each briefing includes:
-- YAML frontmatter with date and metadata
-- Weather at the top (location-specific)
-- Bulleted sections with bold headlines
-- Consolidated references at the bottom
-
-### Customization
-
-Edit the query files in `scripts/prompts/` to modify:
-- Section topics and focus areas
-- Time ranges and recency requirements
-- Output formatting requirements
-- News source balance and priorities
+- **Node.js** >= 18
+- **Perplexity API key** - Required for all searches
+- **Obsidian vault** - Optional, only needed for saving notes
 
 ## Development
 
