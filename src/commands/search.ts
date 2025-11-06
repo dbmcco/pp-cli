@@ -2,6 +2,7 @@
 
 import { PerplexityClient } from '../api/client';
 import { Citation } from '../api/types';
+import { StreamRenderer } from '../utils/stream';
 
 export interface SearchResult {
   content: string;
@@ -12,9 +13,23 @@ export async function simpleSearch(
   client: PerplexityClient,
   query: string
 ): Promise<SearchResult> {
-  const result = await client.query(query);
+  const renderer = new StreamRenderer();
+  let citations: Citation[] = [];
+
+  await client.queryStream(
+    query,
+    {
+      onChunk: (chunk: string) => {
+        renderer.write(chunk);
+      },
+      onComplete: (cites: Citation[]) => {
+        citations = cites;
+      }
+    }
+  );
+
   return {
-    content: result.content,
-    citations: result.citations
+    content: renderer.getFullContent(),
+    citations
   };
 }

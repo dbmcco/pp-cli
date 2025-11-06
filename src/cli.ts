@@ -40,24 +40,8 @@ export async function runCLI() {
         const writer = new ObsidianWriter(config.vaultPath);
 
         if (isInteractive) {
-          // Interactive mode
-          const session = await startInteractiveSession(
-            client,
-            query,
-            (content, citations) => {
-              console.log(); // spacing
-              const formatted = formatResponse(content);
-              console.log(formatted);
-
-              // Show citations if available
-              if (citations.length > 0) {
-                const citationsFormatted = formatCitations(citations);
-                console.log(citationsFormatted);
-              }
-
-              console.log(); // spacing after response
-            }
-          );
+          // Interactive mode - streaming handled internally
+          const session = await startInteractiveSession(client, query);
 
           // Prompt to save conversation
           const filename = await promptToSave(session, client, writer, query);
@@ -66,21 +50,20 @@ export async function runCLI() {
             console.log(chalk.green(`\n✓ Saved to: ${filename}`));
           }
         } else {
-          // Simple search
+          // Simple search with streaming
           const spinner = ora({
             text: 'Searching...',
             color: 'cyan',
             spinner: 'dots'
           }).start();
 
-          const result = await simpleSearch(client, query);
+          console.log(); // spacing
           spinner.stop();
 
-          console.log(); // spacing
-          const formatted = formatResponse(result.content);
-          console.log(formatted);
+          const result = await simpleSearch(client, query);
 
           // Show citations if available
+          console.log(); // spacing
           if (result.citations.length > 0) {
             const citationsFormatted = formatCitations(result.citations);
             console.log(citationsFormatted);
