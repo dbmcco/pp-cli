@@ -25,22 +25,58 @@ export class PerplexityClient {
     });
   }
 
+  private async retryWithBackoff<T>(
+    fn: () => Promise<T>,
+    maxRetries: number = 3
+  ): Promise<T> {
+    let lastError: Error | null = null;
+
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        return await fn();
+      } catch (error) {
+        lastError = error as Error;
+
+        // Don't retry on auth errors
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          throw new Error('Invalid API key. Run `pp config` to update.');
+        }
+
+        // Don't retry on rate limit errors
+        if (axios.isAxiosError(error) && error.response?.status === 429) {
+          const retryAfter = error.response.headers['retry-after'] || '60';
+          throw new Error(`Rate limit hit. Try again in ${retryAfter} seconds.`);
+        }
+
+        // Wait before retrying
+        if (attempt < maxRetries - 1) {
+          const delay = Math.pow(2, attempt) * 1000; // Exponential backoff
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
+      }
+    }
+
+    throw lastError || new Error('Request failed');
+  }
+
   async query(userQuery: string, conversationHistory: Message[] = []): Promise<QueryResult> {
-    const messages: Message[] = [
-      ...conversationHistory,
-      { role: 'user', content: userQuery }
-    ];
+    return this.retryWithBackoff(async () => {
+      const messages: Message[] = [
+        ...conversationHistory,
+        { role: 'user', content: userQuery }
+      ];
 
-    const request: PerplexityRequest = {
-      model: this.model,
-      messages
-    };
+      const request: PerplexityRequest = {
+        model: this.model,
+        messages
+      };
 
-    const response = await this.client.post<PerplexityResponse>('/chat/completions', request);
+      const response = await this.client.post<PerplexityResponse>('/chat/completions', request);
 
-    return {
-      content: response.data.choices[0].message.content,
-      citations: response.data.citations || []
-    };
+      return {
+        content: response.data.choices[0].message.content,
+        citations: response.data.citations || []
+      };
+    });
   }
 }
