@@ -119,12 +119,13 @@ export async function promptToSave(
   }
 
   // Generate topic slug - enforce 5 words max
-  const slugPrompt = `Summarize this conversation topic in exactly 3-5 words (maximum 5 words): "${originalQuery}"`;
+  const slugPrompt = `Create a brief 3-5 word title for a note about: "${originalQuery}". Respond with ONLY the title words, nothing else.`;
   const slugResult = await client.query(slugPrompt);
 
   // Take first 5 words only, convert to slug
   let slug = slugResult.content
     .trim()
+    .replace(/^["']|["']$/g, '') // Remove surrounding quotes if present
     .split(/\s+/)
     .slice(0, 5)
     .join(' ')
