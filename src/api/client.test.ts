@@ -5,6 +5,7 @@ import axios from 'axios';
 import { PerplexityClient } from './client';
 
 vi.mock('axios');
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockedAxios = axios as any;
 
 describe('PerplexityClient', () => {

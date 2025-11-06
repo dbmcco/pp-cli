@@ -28,6 +28,7 @@ export async function startInteractiveSession(
   await handleQuery(client, initialQuery, session, onResponse);
 
   // Interactive loop
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const { input } = await inquirer.prompt([
       {

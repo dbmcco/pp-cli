@@ -19,7 +19,7 @@ describe('simpleSearch', () => {
 
     const result = await simpleSearch(mockClient, 'test query');
 
-    expect(mockQuery).toHaveBeenCalledWith('test query', []);
+    expect(mockQuery).toHaveBeenCalledWith('test query');
     expect(result).toBe('Test response');
   });
 });
