@@ -118,10 +118,19 @@ export async function promptToSave(
     return null;
   }
 
-  // Generate topic slug
-  const slugPrompt = `Summarize this conversation topic in 3-5 words: "${originalQuery}"`;
+  // Generate topic slug - enforce 5 words max
+  const slugPrompt = `Summarize this conversation topic in exactly 3-5 words (maximum 5 words): "${originalQuery}"`;
   const slugResult = await client.query(slugPrompt);
-  const slug = slugResult.content.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+  // Take first 5 words only, convert to slug
+  let slug = slugResult.content
+    .trim()
+    .split(/\s+/)
+    .slice(0, 5)
+    .join(' ')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
 
   // Create note
   const note: ObsidianNote = {

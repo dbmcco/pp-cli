@@ -22,22 +22,37 @@ export function formatAsMarkdown(note: ObsidianNote): string {
   // Conversation
   note.conversation.forEach((entry, index) => {
     if (index > 0) {
+      parts.push('');
       parts.push('---');
       parts.push('');
     }
-    parts.push(`**Q:** ${entry.question}`);
-    parts.push(`**A:** ${entry.answer}`);
+
+    // Question
+    parts.push(`## Q: ${entry.question}`);
+    parts.push('');
+
+    // Answer with proper spacing
+    parts.push(entry.answer);
     parts.push('');
   });
 
   // Citations
   if (note.citations.length > 0) {
+    parts.push('');
     parts.push('---');
     parts.push('');
     parts.push('## Sources');
-    note.citations.forEach(citation => {
-      parts.push(`- [${citation.title}](${citation.url})`);
+    parts.push('');
+
+    // Remove duplicates and format
+    const uniqueCitations = Array.from(
+      new Map(note.citations.map(c => [c.url, c])).values()
+    );
+
+    uniqueCitations.forEach((citation, index) => {
+      parts.push(`${index + 1}. [${citation.title}](${citation.url})`);
     });
+    parts.push('');
   }
 
   return parts.join('\n');
