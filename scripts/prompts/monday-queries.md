@@ -1,16 +1,24 @@
 # Monday Queries
 
-SECTION: Week Preview
-What are the major technology events, product releases, or tech industry developments to watch this week? Keep brief (100-150 words).
+SECTION: Week Ahead Preview
+List major events, product releases, or conferences SCHEDULED for THIS COMING WEEK in GenAI/LLMs, analytics, and tech. Format MUST be bullet points starting with • and bold headline:
+• **Event/Product Name**: Brief description including day/date.
 
 SECTION: Weekend Recap
-What were the 3-5 most important global news stories from the weekend? Keep concise (100-150 words).
+List the 3-5 most important global news stories from THIS PAST WEEKEND. Use balanced reporting from left, center, and right mainstream sources. Format MUST be bullet points starting with • and bold headline:
+• **Headline**: Brief summary.
 
-SECTION: Technology & AI
-What are the latest developments in AI, machine learning, and technology today? Include major tech company news, new tools, frameworks, or software releases. (150-200 words)
+SECTION: GenAI & LLMs
+List recent GenAI/LLM developments (last 7 days preferred, last 30 days acceptable). Include model releases, papers, tools, Hacker News discussions. Format MUST be bullet points starting with • and bold headline:
+• **Model/Tool/Paper Name**: Brief summary.
 
-SECTION: Markets & Business
-What business and market news should we know about for the week ahead? Include any weekend market movements and economic indicators. (100-150 words)
+SECTION: Tech & Business
+List top 3-5 recent tech and business news items. Include market movements, tech announcements, Hacker News highlights. Format MUST be bullet points starting with • and bold headline:
+• **Company/Topic Name**: Brief summary.
+
+SECTION: Electric Vehicles
+List top 2-3 recent EV news items. Include new models, charging infrastructure, policy updates. Format MUST be bullet points starting with • and bold headline:
+• **Topic Name**: Brief summary.
 
 SECTION: Weather
-What is the 7-day weather forecast for Boston, MA? Just list: Day | High/Low | Conditions. Keep it to 3-4 lines maximum.
+Old Lyme, CT 06371 current conditions and forecast. NO citations or reference numbers needed. Format: "Today: [conditions, high/low]. Tomorrow: [forecast]. Week ahead: [brief 5-day outlook]" Plain text only.

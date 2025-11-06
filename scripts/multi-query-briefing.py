@@ -5,11 +5,12 @@
 import subprocess
 import sys
 import os
+import re
 from datetime import datetime
 from pathlib import Path
 
-def run_query(query: str) -> str:
-    """Run a single pp query and return the result"""
+def run_query(query: str) -> tuple[str, list[tuple[str, str]]]:
+    """Run a single pp query and return (content, citations) tuple"""
     try:
         result = subprocess.run(
             ['pp', '--no-interactive', query, '--output', 'markdown'],
@@ -21,10 +22,27 @@ def run_query(query: str) -> str:
         lines = result.stdout.split('\n')
         content = '\n'.join(line for line in lines
                           if not line.startswith(('- ', 'Searching', 'Thinking')))
-        return content.strip()
+
+        # Split content from citations
+        if '## Sources' in content:
+            parts = content.split('## Sources', 1)
+            main_content = parts[0].strip()
+            sources_section = parts[1].strip()
+
+            # Extract citations from sources section
+            citations = []
+            for line in sources_section.split('\n'):
+                # Match pattern: 1. [domain.com](url)
+                match = re.match(r'\d+\.\s+\[([^\]]+)\]\(([^\)]+)\)', line)
+                if match:
+                    citations.append((match.group(1), match.group(2)))
+
+            return main_content, citations
+
+        return content.strip(), []
     except Exception as e:
         print(f"Error running query: {e}", file=sys.stderr)
-        return ""
+        return "", []
 
 def parse_queries_file(file_path: str) -> list[tuple[str, str]]:
     """Parse the queries file into (section_name, query) tuples"""
@@ -53,6 +71,16 @@ def parse_queries_file(file_path: str) -> list[tuple[str, str]]:
 
     return queries
 
+def renumber_citations(content: str, citation_map: dict[int, int]) -> str:
+    """Renumber citations in content according to citation_map"""
+    # Replace [N] with new numbers
+    def replace_cite(match):
+        old_num = int(match.group(1))
+        new_num = citation_map.get(old_num, old_num)
+        return f'[{new_num}]'
+
+    return re.sub(r'\[(\d+)\]', replace_cite, content)
+
 def main():
     # Get script directory and dates
     script_dir = Path(__file__).parent
@@ -74,13 +102,45 @@ def main():
     # Parse queries
     queries = parse_queries_file(str(queries_file))
 
-    # Run each query
+    # Run each query and collect all citations
     results = []
+    all_citations = []
+    weather_content = None
+    weather_section_name = None
+
     for section_name, query in queries:
         print(f"  Querying: {section_name}...")
-        result = run_query(query)
-        if result:
-            results.append((section_name, result))
+        content, citations = run_query(query)
+
+        # Handle weather separately - put it at the top
+        if 'weather' in section_name.lower():
+            weather_section_name = section_name
+            weather_content = content
+            continue
+
+        if content:
+            # Build citation map for this section
+            citation_map = {}
+            section_citations = []
+
+            for i, (domain, url) in enumerate(citations, 1):
+                # Check if we already have this citation
+                global_idx = None
+                for idx, (d, u) in enumerate(all_citations, 1):
+                    if u == url:
+                        global_idx = idx
+                        break
+
+                if global_idx is None:
+                    # New citation
+                    all_citations.append((domain, url))
+                    global_idx = len(all_citations)
+
+                citation_map[i] = global_idx
+
+            # Renumber citations in content
+            content = renumber_citations(content, citation_map)
+            results.append((section_name, content))
 
     # Combine into final note
     print("Combining sections...")
@@ -98,10 +158,22 @@ def main():
         # Title
         f.write(f'# Morning Briefing - {briefing_date}\n\n')
 
-        # Sections
+        # Weather first (compact)
+        if weather_content:
+            f.write(f'**Weather** (Old Lyme, CT): {weather_content}\n\n')
+            f.write('---\n\n')
+
+        # All other sections
         for section_name, content in results:
             f.write(f'## {section_name}\n\n')
             f.write(f'{content}\n\n')
+
+        # References at the bottom
+        if all_citations:
+            f.write('---\n\n')
+            f.write('## References\n\n')
+            for i, (domain, url) in enumerate(all_citations, 1):
+                f.write(f'{i}. [{domain}]({url})\n')
 
     print(f"✓ Briefing saved to: daily-briefings/{today}-news-briefing.md")
 
