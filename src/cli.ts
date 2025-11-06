@@ -18,9 +18,10 @@ export async function runCLI() {
     .version('0.1.0');
 
   program
-    .argument('<query>', 'search query')
+    .argument('[query...]', 'search query')
     .option('-i, --interactive', 'interactive mode with conversation')
-    .action(async (query: string, options: { interactive?: boolean }) => {
+    .action(async (queryParts: string[], options: { interactive?: boolean }) => {
+      const query = queryParts.join(' ');
       try {
         // Load config
         const configManager = new ConfigManager();
