@@ -8,7 +8,7 @@ import { PerplexityClient } from './api/client';
 import { ObsidianWriter } from './obsidian/writer';
 import { simpleSearch } from './commands/search';
 import { startInteractiveSession, promptToSave } from './commands/interactive';
-import { formatResponse } from './utils/format';
+import { formatResponse, formatCitations } from './utils/format';
 
 export async function runCLI() {
   const program = new Command();
@@ -44,9 +44,18 @@ export async function runCLI() {
           const session = await startInteractiveSession(
             client,
             query,
-            (content) => {
+            (content, citations) => {
+              console.log(); // spacing
               const formatted = formatResponse(content);
-              console.log(chalk.cyan(formatted));
+              console.log(formatted);
+
+              // Show citations if available
+              if (citations.length > 0) {
+                const citationsFormatted = formatCitations(citations);
+                console.log(citationsFormatted);
+              }
+
+              console.log(); // spacing after response
             }
           );
 
@@ -54,15 +63,30 @@ export async function runCLI() {
           const filename = await promptToSave(session, client, writer, query);
 
           if (filename) {
-            console.log(chalk.green(`✓ Saved to: ${filename}`));
+            console.log(chalk.green(`\n✓ Saved to: ${filename}`));
           }
         } else {
           // Simple search
-          const spinner = ora('Searching...').start();
+          const spinner = ora({
+            text: 'Searching...',
+            color: 'cyan',
+            spinner: 'dots'
+          }).start();
+
           const result = await simpleSearch(client, query);
           spinner.stop();
-          const formatted = formatResponse(result);
+
+          console.log(); // spacing
+          const formatted = formatResponse(result.content);
           console.log(formatted);
+
+          // Show citations if available
+          if (result.citations.length > 0) {
+            const citationsFormatted = formatCitations(result.citations);
+            console.log(citationsFormatted);
+          }
+
+          console.log(); // spacing
         }
       } catch (error) {
         console.error(chalk.red('Error:'), (error as Error).message);

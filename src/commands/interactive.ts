@@ -1,11 +1,13 @@
 // ABOUTME: Interactive mode command handler
 
 import inquirer from 'inquirer';
+import chalk from 'chalk';
 import { PerplexityClient } from '../api/client';
 import { Message } from '../api/types';
 import { ObsidianWriter } from '../obsidian/writer';
 import { ObsidianNote, ConversationEntry } from '../obsidian/types';
 import { Citation } from '../api/types';
+import { formatCitations } from '../utils/format';
 
 export interface InteractiveSession {
   conversationHistory: Message[];
@@ -16,8 +18,13 @@ export interface InteractiveSession {
 export async function startInteractiveSession(
   client: PerplexityClient,
   initialQuery: string,
-  onResponse: (content: string) => void
+  onResponse: (content: string, citations: Citation[]) => void
 ): Promise<InteractiveSession> {
+  // Check for TTY to prevent crashes in non-interactive environments
+  if (!process.stdin.isTTY) {
+    throw new Error('Interactive mode requires a TTY. Run from a terminal, not a pipe.');
+  }
+
   const session: InteractiveSession = {
     conversationHistory: [],
     conversationEntries: [],
@@ -34,7 +41,7 @@ export async function startInteractiveSession(
       {
         type: 'input',
         name: 'input',
-        message: '>',
+        message: chalk.dim('>'),
         prefix: ''
       }
     ]);
@@ -56,7 +63,7 @@ async function handleQuery(
   client: PerplexityClient,
   query: string,
   session: InteractiveSession,
-  onResponse: (content: string) => void
+  onResponse: (content: string, citations: Citation[]) => void
 ): Promise<void> {
   const result = await client.query(query, session.conversationHistory);
 
@@ -72,7 +79,7 @@ async function handleQuery(
 
   session.allCitations.push(...result.citations);
 
-  onResponse(result.content);
+  onResponse(result.content, result.citations);
 }
 
 export async function promptToSave(

@@ -23,12 +23,15 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^1.6.2",
+    "boxen": "^8.0.1",
     "chalk": "^5.3.0",
+    "cli-boxes": "^4.0.1",
     "commander": "^11.1.0",
     "inquirer": "^9.2.12",
     "marked": "^15.0.12",
     "marked-terminal": "^7.3.0",
-    "ora": "^8.0.1"
+    "ora": "^8.0.1",
+    "terminal-link": "^5.0.0"
   },
   "devDependencies": {
     "@types/inquirer": "^9.0.7",
