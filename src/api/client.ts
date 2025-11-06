@@ -1,7 +1,12 @@
 // ABOUTME: Perplexity API client
 
 import axios, { AxiosInstance } from 'axios';
-import { PerplexityRequest, PerplexityResponse, Message } from './types';
+import { PerplexityRequest, PerplexityResponse, Message, Citation } from './types';
+
+export interface QueryResult {
+  content: string;
+  citations: Citation[];
+}
 
 export class PerplexityClient {
   private apiKey: string;
@@ -18,5 +23,24 @@ export class PerplexityClient {
         'Content-Type': 'application/json'
       }
     });
+  }
+
+  async query(userQuery: string, conversationHistory: Message[] = []): Promise<QueryResult> {
+    const messages: Message[] = [
+      ...conversationHistory,
+      { role: 'user', content: userQuery }
+    ];
+
+    const request: PerplexityRequest = {
+      model: this.model,
+      messages
+    };
+
+    const response = await this.client.post<PerplexityResponse>('/chat/completions', request);
+
+    return {
+      content: response.data.choices[0].message.content,
+      citations: response.data.citations || []
+    };
   }
 }
