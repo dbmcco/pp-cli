@@ -1,9 +1,6 @@
 # Friday: Week in Review & Weekend Preview
 
-Generate a comprehensive morning briefing for {DATE}. Structure as follows:
-
-## Weather Forecast
-7-day forecast for Boston, MA (high/low temps, conditions, precipitation)
+Generate a comprehensive briefing for {DATE}. Focus on NEWS and ANALYSIS, not weather details.
 
 ## Week in Review
 Summary of the most significant stories from this week
@@ -23,5 +20,8 @@ Breaking news and developments from today
 
 ## Technology Wrap-Up
 Week's most significant tech developments
+
+## Weather
+Brief: Boston, MA 7-day outlook (just highs/lows and conditions)
 
 Keep concise (600-800 words) with forward-looking insights.

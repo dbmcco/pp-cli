@@ -1,9 +1,6 @@
 # Sunday: Week Ahead Prep & Insights
 
-Generate a comprehensive briefing for {DATE}. Structure as follows:
-
-## Weather Forecast
-7-day forecast for Boston, MA (high/low temps, conditions, precipitation)
+Generate a comprehensive briefing for {DATE}. Focus on NEWS and ANALYSIS, not weather details.
 
 ## Sunday Headlines
 Top developments from today
@@ -26,5 +23,8 @@ What to read, understand, or prepare for the week ahead
 
 ## Ideas for the Week
 Thought-provoking questions or themes to consider
+
+## Weather
+Brief: Boston, MA 7-day outlook (just highs/lows and conditions)
 
 Keep focused on forward-looking insights (700-900 words).

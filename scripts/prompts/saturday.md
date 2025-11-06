@@ -1,9 +1,6 @@
 # Saturday: Weekend Deep Dive & Analysis
 
-Generate a comprehensive briefing for {DATE}. Structure as follows:
-
-## Weather Forecast
-7-day forecast for Boston, MA (high/low temps, conditions, precipitation)
+Generate a comprehensive briefing for {DATE}. Focus on NEWS and ANALYSIS, not weather details.
 
 ## Weekend Headlines
 Top news and developments from today

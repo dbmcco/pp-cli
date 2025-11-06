@@ -1,9 +1,6 @@
 # Tuesday: Business & Markets Deep Dive
 
-Generate a comprehensive morning briefing for {DATE}. Structure as follows:
-
-## Weather Forecast
-7-day forecast for Boston, MA (high/low temps, conditions, precipitation)
+Generate a comprehensive morning briefing for {DATE}. Focus on NEWS and ANALYSIS, not weather details.
 
 ## Top Headlines
 3-5 most important global news stories today
@@ -23,5 +20,8 @@ Business-impacting policy changes, regulations, or legal developments
 
 ## Global Economy
 International economic news and trade developments
+
+## Weather
+Brief: Boston, MA 7-day outlook (just highs/lows and conditions)
 
 Keep concise (600-800 words) with actionable insights.

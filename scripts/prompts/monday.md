@@ -1,15 +1,12 @@
 # Monday: Week Ahead & Technology Focus
 
-Generate a comprehensive morning briefing for {DATE}. Structure as follows:
-
-## Weather Forecast
-7-day forecast for Boston, MA (high/low temps, conditions, precipitation)
+Generate a comprehensive morning briefing for {DATE}. Focus on NEWS and ANALYSIS, not weather details.
 
 ## Week Preview
-What are the major events, releases, or developments to watch this week?
+Major events, releases, or developments to watch this week
 
 ## Top Weekend Headlines
-Quick recap of the 3-5 most important stories from the weekend
+3-5 most important stories from the weekend
 
 ## Technology & AI
 - Latest AI/ML developments and releases
@@ -24,5 +21,8 @@ Quick recap of the 3-5 most important stories from the weekend
 
 ## Notable Events
 Political, social, or cultural developments
+
+## Weather
+Brief: Boston, MA 7-day outlook (just highs/lows and conditions)
 
 Keep concise (600-800 words) with clear takeaways.
