@@ -1,0 +1,40 @@
+{
+  "name": "pp-cli",
+  "version": "0.1.0",
+  "description": "Perplexity CLI search tool",
+  "main": "dist/index.js",
+  "bin": {
+    "pp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "lint": "eslint src --ext .ts",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": ["cli", "perplexity", "search"],
+  "author": "Braydon",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.1.0",
+    "axios": "^1.6.2",
+    "inquirer": "^9.2.12",
+    "chalk": "^5.3.0",
+    "ora": "^8.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "@types/inquirer": "^9.0.7",
+    "typescript": "^5.3.3",
+    "tsx": "^4.7.0",
+    "vitest": "^1.1.0",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/parser": "^6.16.0",
+    "@typescript-eslint/eslint-plugin": "^6.16.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
