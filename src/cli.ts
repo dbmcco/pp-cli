@@ -45,13 +45,17 @@ export async function runCLI() {
           const readline = await import('readline');
           const rl = readline.createInterface({
             input: process.stdin,
-            output: process.stdout
+            output: process.stdout,
+            terminal: false  // Disable terminal-specific behavior (no vim!)
           });
 
+          console.log(chalk.cyan('Enter your query (paste anything, then press Enter):'));
+          process.stdout.write(chalk.cyan('> '));
+
           query = await new Promise<string>((resolve) => {
-            rl.question(chalk.cyan('Enter your query (paste anything, then press Enter):\n> '), (answer) => {
+            rl.once('line', (line) => {
               rl.close();
-              resolve(answer.trim());
+              resolve(line.trim());
             });
           });
 
