@@ -44,6 +44,11 @@ pp rust ownership
 Save to vault? (y/n): y
 ✓ Saved to: 2025-11-06-rust-ownership-basics.md
 
+# Paste mode - run pp without arguments to safely paste anything
+pp
+Enter your query (paste anything, then press Enter):
+> [paste your text here - no quotes needed]
+
 # Deep research mode
 pp -r latest advances in quantum computing
 > what are the main challenges
@@ -64,6 +69,7 @@ Every query starts an interactive conversation where you can ask follow-up quest
 - Prompted to save the full conversation to Obsidian
 - Responses stream with beautiful markdown formatting
 - Citations displayed with clickable links
+- **Paste mode** - Run `pp` without arguments to safely paste complex text
 
 ### Example
 
@@ -75,7 +81,16 @@ pp capital of france
 Save to vault? y
 ```
 
-**Note about contractions:** Wrap queries with contractions in quotes:
+### Handling Special Characters
+
+**Option 1: Paste mode (recommended for complex text)**
+```bash
+pp
+Enter your query (paste anything, then press Enter):
+> [paste LinkedIn message, email, code, etc.]
+```
+
+**Option 2: Wrap in quotes**
 ```bash
 pp "what's the difference between rust and c++"
 ```

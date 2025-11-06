@@ -33,11 +33,39 @@ export async function runCLI() {
       saveTo?: string;
       appendTo?: string;
     }) => {
-      const query = queryParts.join(' ');
+      let query = queryParts.join(' ').trim();
+
       try {
         // Load config
         const configManager = new ConfigManager();
         const config = await configManager.getOrSetupConfig();
+
+        // If no query provided and in interactive mode, prompt for input
+        if (!query && options.interactive !== false) {
+          const readline = await import('readline');
+          const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+          });
+
+          query = await new Promise<string>((resolve) => {
+            rl.question(chalk.cyan('Enter your query (paste anything, then press Enter):\n> '), (answer) => {
+              rl.close();
+              resolve(answer.trim());
+            });
+          });
+
+          if (!query) {
+            console.log(chalk.yellow('No query provided. Exiting.'));
+            process.exit(0);
+          }
+        }
+
+        // Still no query? Exit gracefully
+        if (!query) {
+          console.log(chalk.yellow('No query provided. Use: pp "your query here"'));
+          process.exit(0);
+        }
 
         // Use research model if -r flag is set
         const model = options.research ? 'sonar-reasoning' : config.defaultModel;
