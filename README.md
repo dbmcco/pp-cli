@@ -57,23 +57,21 @@ In interactive mode:
 
 ### Deep Research Mode
 
-Use the `-r` flag for comprehensive research with the `sonar-reasoning` model. In interactive mode with `-r`, conversations are automatically saved to Obsidian:
+Use the `-r` flag for comprehensive research with the `sonar-reasoning` model:
 
 ```bash
 pp -i -r latest advances in quantum computing
 > what are the main challenges
 > which companies are leading
 > exit
-
-Saving research to vault...
+Save to vault? (y/n): y
 ✓ Saved to: 2025-11-06-quantum-computing-advances.md
 ```
 
 Research mode provides:
-- More detailed, comprehensive responses
-- Advanced reasoning capabilities
-- Automatic save to Obsidian (when used with `-i`)
+- More detailed, comprehensive responses using advanced reasoning
 - Better for in-depth analysis and complex topics
+- Ideal for research that you want to save and reference later
 
 ### Obsidian Notes
 
@@ -131,7 +129,7 @@ Config is stored at `~/.config/pp/config.json`
 pp [query...]              Run a simple search
 pp -i [query...]           Start interactive mode
 pp -r [query...]           Deep research mode with comprehensive analysis
-pp -i -r [query...]        Interactive research mode (auto-saves to Obsidian)
+pp -i -r [query...]        Interactive research mode
 pp config                  Configure API key and vault path
 pp --version               Show version
 pp --help                  Show help

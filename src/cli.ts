@@ -46,11 +46,8 @@ export async function runCLI() {
             }
           );
 
-          // Auto-save for research mode, prompt otherwise
-          if (options.research) {
-            console.log(chalk.yellow('\nSaving research to vault...'));
-          }
-          const filename = await promptToSave(session, client, writer, query, options.research);
+          // Prompt to save conversation
+          const filename = await promptToSave(session, client, writer, query);
 
           if (filename) {
             console.log(chalk.green(`✓ Saved to: ${filename}`));
