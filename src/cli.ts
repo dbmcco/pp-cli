@@ -8,6 +8,7 @@ import { PerplexityClient } from './api/client';
 import { ObsidianWriter } from './obsidian/writer';
 import { simpleSearch } from './commands/search';
 import { startInteractiveSession, promptToSave } from './commands/interactive';
+import { formatResponse } from './utils/format';
 
 export async function runCLI() {
   const program = new Command();
@@ -44,8 +45,8 @@ export async function runCLI() {
             client,
             query,
             (content) => {
-              console.log(chalk.cyan(content));
-              console.log();
+              const formatted = formatResponse(content);
+              console.log(chalk.cyan(formatted));
             }
           );
 
@@ -60,7 +61,8 @@ export async function runCLI() {
           const spinner = ora('Searching...').start();
           const result = await simpleSearch(client, query);
           spinner.stop();
-          console.log(result);
+          const formatted = formatResponse(result);
+          console.log(formatted);
         }
       } catch (error) {
         console.error(chalk.red('Error:'), (error as Error).message);
