@@ -118,24 +118,20 @@ export async function promptToSave(
     return null;
   }
 
-  // Generate topic slug - enforce 5 words max
-  const slugPrompt = `Create a brief 3-5 word title for a note about: "${originalQuery}". Respond with ONLY the title words, nothing else.`;
-  const slugResult = await client.query(slugPrompt);
-
-  // Take first 5 words only, convert to slug
-  let slug = slugResult.content
+  // Generate slug from original query - take first 5 words
+  const slug = originalQuery
     .trim()
-    .replace(/^["']|["']$/g, '') // Remove surrounding quotes if present
     .split(/\s+/)
     .slice(0, 5)
     .join(' ')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
+    .replace(/^-|-$/g, '')
+    .substring(0, 50); // Max 50 chars for filename safety
 
-  // Create note
+  // Use the original query as the title
   const note: ObsidianNote = {
-    title: slugResult.content,
+    title: originalQuery,
     query: originalQuery,
     conversation: session.conversationEntries,
     citations: session.allCitations
