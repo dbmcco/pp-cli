@@ -4,6 +4,7 @@ import { promises as fs } from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import { Config, DEFAULT_CONFIG_DIR, CONFIG_FILENAME } from './types';
+import { promptForConfig } from './prompts';
 
 export class ConfigManager {
   private configDir: string;
@@ -29,5 +30,19 @@ export class ConfigManager {
   async writeConfig(config: Config): Promise<void> {
     await fs.mkdir(this.configDir, { recursive: true });
     await fs.writeFile(this.configPath, JSON.stringify(config, null, 2));
+  }
+
+  async setupConfig(): Promise<Config> {
+    const config = await promptForConfig();
+    await this.writeConfig(config);
+    return config;
+  }
+
+  async getOrSetupConfig(): Promise<Config> {
+    const existing = await this.readConfig();
+    if (existing) {
+      return existing;
+    }
+    return this.setupConfig();
   }
 }
