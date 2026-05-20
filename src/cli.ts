@@ -10,6 +10,7 @@ import { PerplexityClient } from './api/client';
 import { ObsidianWriter } from './obsidian/writer';
 import { startInteractiveSession, promptToSave } from './commands/interactive';
 import { formatResponse, formatCitations, extractThinking } from './utils/format';
+import { modelForRoute, PP_DEFAULT_SEARCH_ROUTE, PP_RESEARCH_ROUTE } from './model-routes';
 
 export async function runCLI() {
   const program = new Command();
@@ -96,11 +97,14 @@ export async function runCLI() {
           process.exit(0);
         }
 
-        // Use research model if -r flag is set
-        const model = options.research ? 'sonar-reasoning' : config.defaultModel;
+        // Use research route if -r flag is set.
+        const routeId = options.research ? PP_RESEARCH_ROUTE : config.defaultRoute || PP_DEFAULT_SEARCH_ROUTE;
+        const model = options.research || config.defaultRoute
+          ? modelForRoute(routeId)
+          : config.defaultModel || modelForRoute(routeId);
 
         // Initialize client and writer
-        const client = new PerplexityClient(config.apiKey, model);
+        const client = new PerplexityClient(config.apiKey, model, routeId);
         const writer = new ObsidianWriter(config.vaultPath);
 
         // Non-interactive mode for scripting

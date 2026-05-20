@@ -3,6 +3,7 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import axios from 'axios';
 import { PerplexityClient } from './client';
+import { modelForRoute, PP_DEFAULT_SEARCH_ROUTE } from '../model-routes';
 
 vi.mock('axios');
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,7 +15,7 @@ describe('PerplexityClient', () => {
   });
 
   it('should initialize with API key and model', () => {
-    const client = new PerplexityClient('test-key', 'sonar-pro');
+    const client = new PerplexityClient('test-key', modelForRoute(PP_DEFAULT_SEARCH_ROUTE));
     expect(client).toBeDefined();
   });
 
@@ -23,7 +24,7 @@ describe('PerplexityClient', () => {
       const mockResponse = {
         data: {
           id: 'test-id',
-          model: 'sonar-pro',
+          model: modelForRoute(PP_DEFAULT_SEARCH_ROUTE),
           created: 123456,
           choices: [{
             index: 0,
@@ -33,9 +34,7 @@ describe('PerplexityClient', () => {
             },
             finish_reason: 'stop'
           }],
-          citations: [
-            { title: 'Test Source', url: 'https://example.com' }
-          ]
+          citations: ['https://example.com']
         }
       };
 
@@ -43,12 +42,12 @@ describe('PerplexityClient', () => {
         post: vi.fn().mockResolvedValue(mockResponse)
       });
 
-      const client = new PerplexityClient('test-key', 'sonar-pro');
+      const client = new PerplexityClient('test-key', modelForRoute(PP_DEFAULT_SEARCH_ROUTE));
       const result = await client.query('test query');
 
       expect(result.content).toBe('Test response');
       expect(result.citations).toHaveLength(1);
-      expect(result.citations[0].title).toBe('Test Source');
+      expect(result.citations[0].title).toBe('example.com');
     });
   });
 });

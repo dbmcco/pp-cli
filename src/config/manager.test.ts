@@ -32,7 +32,7 @@ describe('ConfigManager', () => {
       const expectedConfig = {
         apiKey: 'test-key',
         vaultPath: '/test/path',
-        defaultModel: 'sonar-pro'
+        defaultRoute: 'pp.default_search'
       };
 
       const configPath = path.join(testConfigDir, 'config.json');
@@ -50,7 +50,7 @@ describe('ConfigManager', () => {
       const config = {
         apiKey: 'test-key',
         vaultPath: '/test/path',
-        defaultModel: 'sonar-pro'
+        defaultRoute: 'pp.default_search'
       };
 
       await configManager.writeConfig(config);
@@ -63,7 +63,7 @@ describe('ConfigManager', () => {
       const config = {
         apiKey: 'test-key',
         vaultPath: '/test/path',
-        defaultModel: 'sonar-pro'
+        defaultRoute: 'pp.default_search'
       };
 
       await configManager.writeConfig(config);

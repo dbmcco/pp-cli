@@ -1,24 +1,17 @@
-# Tuesday Queries
+# Tuesday Queries - Business & Markets Focus
 
-SECTION: Top Headlines
-List the 3-5 most important global news stories TODAY (Tuesday). Use balanced reporting from left, center, and right mainstream sources. Format MUST be bullet points starting with • and bold headline:
-• **Headline**: Brief summary.
+SECTION: Key Headlines
+List the 3-5 most important global news stories from the PAST 48 HOURS ONLY. Prioritize stories from AP, Reuters, NPR, BBC, or major newspapers. CRITICAL: For any casualty/death toll figures, cite the specific source and note if figures are preliminary. Do NOT include stories older than 2 days. Format MUST be bullet points starting with • and bold headline:
+• **Headline**: Brief summary with source attribution.
 
-SECTION: Business & Markets
-List top 3-5 market movements, earnings reports, and economic news from TODAY and recent days. Format MUST be bullet points starting with • and bold headline:
+SECTION: Business & Markets Deep Dive
+List top 5-7 market movements, earnings reports, economic news, and significant business deals from the past week. Format MUST be bullet points starting with • and bold headline:
+• **Company/Topic Name**: Brief summary with market impact.
+
+SECTION: Connecticut Business & Economy
+List 2-3 recent business or economic news items specifically about Connecticut or affecting Connecticut residents. Format MUST be bullet points starting with • and bold headline:
 • **Topic Name**: Brief summary.
 
-SECTION: GenAI & LLMs
-List recent GenAI/LLM developments (last 7 days preferred, last 30 days acceptable). Include Hacker News discussions. Format MUST be bullet points starting with • and bold headline:
-• **Model/Tool/Paper Name**: Brief summary.
-
-SECTION: Tech Industry
-List top 3-5 recent tech company news items. Include Hacker News trending topics. Format MUST be bullet points starting with • and bold headline:
-• **Company/Topic Name**: Brief summary.
-
-SECTION: Electric Vehicles
-List top 2-3 recent EV and clean energy news items. Format MUST be bullet points starting with • and bold headline:
+SECTION: Real Estate & Housing
+List 2-3 recent news items about real estate market trends, mortgage rates, or housing policy. Format MUST be bullet points starting with • and bold headline:
 • **Topic Name**: Brief summary.
-
-SECTION: Weather
-Old Lyme, CT 06371 current conditions and forecast. NO citations or reference numbers needed. Format: "Today: [conditions, high/low]. Tomorrow: [forecast]. Weekend: [Sat/Sun forecast]" Plain text only.

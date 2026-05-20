@@ -2,6 +2,7 @@
 
 import axios, { AxiosInstance } from 'axios';
 import { PerplexityRequest, PerplexityResponse, Message, Citation } from './types';
+import { modelForRoute, PP_DEFAULT_SEARCH_ROUTE } from '../model-routes';
 
 export interface QueryResult {
   content: string;
@@ -15,12 +16,18 @@ export interface StreamCallbacks {
 
 export class PerplexityClient {
   private apiKey: string;
-  private model: string;
+  readonly model: string;
+  readonly routeId: string;
   private client: AxiosInstance;
 
-  constructor(apiKey: string, model: string = 'sonar-pro') {
+  constructor(
+    apiKey: string,
+    model: string = modelForRoute(PP_DEFAULT_SEARCH_ROUTE),
+    routeId: string = PP_DEFAULT_SEARCH_ROUTE
+  ) {
     this.apiKey = apiKey;
     this.model = model;
+    this.routeId = routeId;
     this.client = axios.create({
       baseURL: 'https://api.perplexity.ai',
       headers: {

@@ -2,6 +2,7 @@
 
 import inquirer from 'inquirer';
 import { Config } from './types';
+import { PP_DEFAULT_SEARCH_ROUTE } from '../model-routes';
 
 export async function promptForConfig(): Promise<Config> {
   const answers = await inquirer.prompt([
@@ -29,9 +30,9 @@ export async function promptForConfig(): Promise<Config> {
     },
     {
       type: 'input',
-      name: 'defaultModel',
-      message: 'Default Perplexity Model:',
-      default: 'sonar-pro'
+      name: 'defaultRoute',
+      message: 'Default Perplexity Route:',
+      default: PP_DEFAULT_SEARCH_ROUTE
     }
   ]);
 

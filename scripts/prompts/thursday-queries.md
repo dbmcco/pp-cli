@@ -1,20 +1,17 @@
-# Thursday Queries
+# Thursday Queries - Cars & Local News
 
-SECTION: Top Headlines
-List the 3-5 most important global news stories TODAY (Thursday). Use balanced reporting from mainstream sources. Format MUST be bullet points starting with • and bold headline:
-• **Headline here**: Brief 1-2 sentence summary of the story.
+SECTION: Key Headlines
+List the 3-5 most important global news stories from the PAST 48 HOURS ONLY. Prioritize stories from AP, Reuters, NPR, BBC, or major newspapers. CRITICAL: For any casualty/death toll figures, cite the specific source and note if figures are preliminary. Do NOT include stories older than 2 days. Format MUST be bullet points starting with • and bold headline:
+• **Headline**: Brief summary with source attribution.
 
-SECTION: GenAI & LLMs
-List recent GenAI/LLM developments (last 7 days preferred, but last 30 days acceptable if no recent news). Include: model releases, major papers, tools, industry announcements. Format MUST be bullet points starting with • and bold headline:
-• **Model/Tool/Paper Name**: Brief 1-2 sentence summary.
+SECTION: Automotive Deep Dive
+List 4-6 recent automotive news items. Include EVs, traditional cars, autonomous vehicles, industry news, car reviews. Format MUST be bullet points starting with • and bold headline:
+• **Topic/Model Name**: Brief summary.
 
-SECTION: Tech Industry
-List top 3-5 tech company news items from recent days. Include Hacker News trending topics. Format MUST be bullet points starting with • and bold headline:
-• **Company/Topic Name**: Brief 1-2 sentence summary.
+SECTION: Connecticut Local News
+List 3-5 important news stories from Connecticut (Old Lyme, New London County, or state-wide). Format MUST be bullet points starting with • and bold headline:
+• **Story Headline**: Brief summary.
 
-SECTION: Electric Vehicles
-List top 2-3 recent EV news items. New models, charging infrastructure, policy updates. Format MUST be bullet points starting with • and bold headline:
-• **Topic Name**: Brief 1-2 sentence summary.
-
-SECTION: Weather
-Old Lyme, CT 06371 current conditions and forecast. NO citations or reference numbers needed. Format: "Today: [conditions, high/low]. Tomorrow: [forecast]. Weekend: [Sat/Sun forecast]" Plain text only.
+SECTION: Home & Property
+List 2-3 news items about home improvement, smart home tech, property maintenance, or home-related products. Format MUST be bullet points starting with • and bold headline:
+• **Topic Name**: Brief summary.

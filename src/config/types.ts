@@ -3,7 +3,8 @@
 export interface Config {
   apiKey: string;
   vaultPath: string;
-  defaultModel: string;
+  defaultRoute?: string;
+  defaultModel?: string;
 }
 
 export const DEFAULT_CONFIG_DIR = '.config/pp';

@@ -165,6 +165,7 @@ VAULT_PATH="your-folder/${TODAY}-briefing.md"
    ```bash
    pp --help
    ```
+   It must show Perplexity flags like `--no-interactive`; if it shows ASN.1/certificate options, set `PP_CLI_PATH` to the real Perplexity CLI.
 
 2. **Check config:**
    ```bash
@@ -174,6 +175,12 @@ VAULT_PATH="your-folder/${TODAY}-briefing.md"
 3. **Run with verbose output:**
    ```bash
    bash -x /Users/braydon/projects/experiments/pp/scripts/morning-briefing.sh
+   ```
+
+4. **Deep dives timing out:**
+   Increase the Perplexity request timeout in `scripts/.env`:
+   ```bash
+   PP_CLI_TIMEOUT_SECONDS=240
    ```
 
 ### No Briefing Generated

@@ -9,6 +9,7 @@ import { ObsidianWriter } from '../obsidian/writer';
 import { ObsidianNote, ConversationEntry } from '../obsidian/types';
 import { Citation } from '../api/types';
 import { formatCitations, formatResponse } from '../utils/format';
+import { PP_RESEARCH_ROUTE } from '../model-routes';
 
 export interface InteractiveSession {
   conversationHistory: Message[];
@@ -66,7 +67,7 @@ async function handleQuery(
 ): Promise<void> {
   // Show spinner for research model (reasoning takes time)
   const spinner = ora({
-    text: client['model'] === 'sonar-reasoning' ? chalk.dim('Thinking deeply...') : 'Searching...',
+    text: client.routeId === PP_RESEARCH_ROUTE ? chalk.dim('Thinking deeply...') : 'Searching...',
     color: 'cyan',
     spinner: 'dots'
   }).start();

@@ -1,28 +1,21 @@
-# Sunday Queries
+# Sunday Queries - Week Ahead Planning
+
+SECTION: Key Headlines
+List the 3-5 most important global news stories from the PAST 48 HOURS ONLY. Prioritize stories from AP, Reuters, NPR, BBC, or major newspapers. CRITICAL: For any casualty/death toll figures, cite the specific source and note if figures are preliminary. Do NOT include stories older than 2 days. Format MUST be bullet points starting with • and bold headline:
+• **Headline**: Brief summary with source attribution.
 
 SECTION: Week Ahead Preview
-List major events, product releases, conferences SCHEDULED for THIS COMING WEEK (Monday-Friday) in GenAI/LLMs, analytics, and tech. Include Synthyra/LFW relevant sectors. Format MUST be bullet points starting with • and bold headline:
+List major events, product releases, conferences SCHEDULED for the coming week across tech, business, culture, and politics. Format MUST be bullet points starting with • and bold headline:
 • **Event/Product Name**: Brief description including day/date.
 
-SECTION: Weekend Headlines
-List the 3-5 most important global news stories from THIS WEEKEND (Saturday/Sunday). Use balanced reporting from left, center, and right mainstream sources. Format MUST be bullet points starting with • and bold headline:
-• **Headline**: Brief summary.
-
-SECTION: Classical Music Weekend
-List 2-3 classical music events from THIS WEEKEND. Format MUST be bullet points starting with • and bold headline:
-• **Event/Recording/Announcement**: Brief summary.
-
-SECTION: GenAI & Tech Outlook
-List what to watch THIS COMING WEEK in AI/ML and tech. What's scheduled? What's expected? Format MUST be bullet points starting with • and bold headline:
-• **Topic/Event Name**: Brief description.
-
-SECTION: Markets Preview
-List THIS COMING WEEK's market calendar: earnings reports scheduled, economic indicators being released, policy announcements expected. Format MUST be bullet points starting with • and bold headline:
+SECTION: Markets & Economy Preview
+List the coming week's market calendar: earnings reports scheduled, economic indicators being released, Fed/policy announcements expected. Format MUST be bullet points starting with • and bold headline:
 • **Event Name**: Day and brief description.
 
-SECTION: Electric Vehicles
-List EV and clean energy events scheduled for THIS COMING WEEK. Format MUST be bullet points starting with • and bold headline:
-• **Event/Announcement**: Brief description.
+SECTION: Connecticut Week Ahead
+List 2-3 events, town meetings, or important happenings in Connecticut the coming week. Format MUST be bullet points starting with • and bold headline:
+• **Event Name**: Brief description with location and date.
 
-SECTION: Weather
-Old Lyme, CT 06371 current conditions and forecast. NO citations or reference numbers needed. Format: "Today: [conditions, high/low]. Tomorrow: [Monday forecast]. Week ahead: [Tue-Fri outlook]" Plain text only.
+SECTION: Classical Music Week Ahead
+List classical music concerts, chamber music, or opera performances happening in the coming week within 50 miles of Old Lyme, CT (06371). Include Hartford Symphony, New Haven Symphony, Yale School of Music, and other regional venues. Format MUST be bullet points starting with • and bold headline:
+• **Ensemble/Artist - Venue**: Day, date, and program highlights.

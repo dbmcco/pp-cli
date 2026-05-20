@@ -1,27 +1,24 @@
-# Saturday Queries
+# Saturday Queries - Deep Dive & Weekend
+
+SECTION: Key Headlines
+List the 3-5 most important global news stories from the PAST 48 HOURS ONLY. Prioritize stories from AP, Reuters, NPR, BBC, or major newspapers. CRITICAL: For any casualty/death toll figures, cite the specific source and note if figures are preliminary. Do NOT include stories older than 2 days. Format MUST be bullet points starting with • and bold headline:
+• **Headline**: Brief summary with source attribution.
 
 SECTION: Week in Review
-List the top 5-7 most significant global news stories from THIS PAST WEEK (Monday-Friday). Use balanced reporting from left, center, and right mainstream sources. Format MUST be bullet points starting with • and bold headline:
+List the top 5-7 most significant global news stories from the past week. Format MUST be bullet points starting with • and bold headline:
 • **Headline**: Brief summary.
 
+SECTION: Classical Music News & Recordings
+List recent classical music news including: new classical compositions premiered, composer announcements, significant new recordings, or major classical music awards. Include both contemporary composers and classical repertoire. Format MUST be bullet points starting with • and bold headline:
+• **Composer/Work/Recording**: Brief summary with details.
+
 SECTION: GenAI Deep Dive
-Write 2-3 paragraphs about the MOST SIGNIFICANT GenAI/LLM development from THIS PAST WEEK. Include technical details, industry implications, competitive landscape, and significance. Narrative paragraphs, not bullets.
+Write 2-3 paragraphs about the MOST SIGNIFICANT GenAI/LLM development from recent weeks. Include technical details, industry implications, and significance. Narrative paragraphs, not bullets.
 
-SECTION: Hacker News Weekly Highlights
-List the top 7-10 Hacker News stories from THIS PAST WEEK (Monday-Friday). Format MUST be bullet points starting with • and bold headline:
-• **Story Title**: Brief description of why it was significant.
+SECTION: Classical Concerts & Performances Near 06371
+List upcoming classical music concerts, chamber music performances, or opera within 50 miles of Old Lyme, CT (zip 06371). Include major orchestras like Hartford Symphony, New Haven Symphony, Yale School of Music, or significant touring artists. Focus on next 2-4 weeks. Format MUST be bullet points starting with • and bold headline:
+• **Ensemble/Artist - Venue**: Date and program details.
 
-SECTION: Classical Music News
-List 2-3 classical music news items from THIS PAST WEEK and WEEKEND. Format MUST be bullet points starting with • and bold headline:
-• **Event/Recording/Announcement**: Brief summary.
-
-SECTION: Tech Industry Weekly
-List top 5-7 tech company announcements from THIS PAST WEEK. Include Synthyra/LFW relevant sectors. Format MUST be bullet points starting with • and bold headline:
-• **Company/Topic Name**: Brief summary.
-
-SECTION: Electric Vehicles
-List top 3-4 EV and clean energy developments from THIS PAST WEEK. Format MUST be bullet points starting with • and bold headline:
-• **Topic Name**: Brief summary.
-
-SECTION: Weather
-Old Lyme, CT 06371 current conditions and forecast. NO citations or reference numbers needed. Format: "Today: [conditions, high/low]. Tomorrow: [Sunday forecast]. Next week: [Mon-Wed outlook]" Plain text only.
+SECTION: Major Orchestra & Chamber Music Announcements
+List recent announcements from major US orchestras or chamber music organizations: new music directors, season announcements, commissioning projects, or significant touring schedules. Format MUST be bullet points starting with • and bold headline:
+• **Orchestra/Ensemble**: Brief summary of announcement.

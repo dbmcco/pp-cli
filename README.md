@@ -6,7 +6,7 @@ A conversational command-line interface for Perplexity AI with beautiful termina
 
 - **Conversational by default** - Interactive queries with context preservation
 - **Beautiful formatting** - Markdown rendering with syntax highlighting and clickable links
-- **Research mode** - Deep analysis with the `sonar-reasoning` model
+- **Research mode** - Deep analysis through the central `pp.research` route
 - **Obsidian integration** - Save conversations as formatted markdown notes
 - **Automated briefings** - Daily personalized news summaries delivered to your vault
 - **Claude Code integration** - Non-interactive mode with JSON/markdown output for programmatic use
@@ -29,7 +29,7 @@ pp config
 You'll be prompted for:
 - **Perplexity API Key** - Get one at [perplexity.ai](https://www.perplexity.ai/)
 - **Obsidian Vault Path** - Path to your searches directory (e.g., `/Users/you/vault/searches`)
-- **Default Model** - Press Enter for `sonar-pro`
+- **Default Route** - Press Enter for `pp.default_search`
 
 Config is stored at `~/.config/pp/config.json`
 
@@ -97,7 +97,7 @@ pp "what's the difference between rust and c++"
 
 ## Research Mode
 
-Use the `-r` flag for comprehensive research with the `sonar-reasoning` model:
+Use the `-r` flag for comprehensive research through the central `pp.research` route:
 
 ```bash
 pp -r "latest advances in fusion energy"
@@ -245,7 +245,7 @@ pp --no-interactive "Node.js advantages" --output text
     "https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html",
     "https://www.w3schools.com/rust/rust_ownership.php"
   ],
-  "model": "sonar-pro"
+  "model": "<resolved-model>"
 }
 ```
 
@@ -255,7 +255,7 @@ pp --no-interactive "Node.js advantages" --output text
 - `--output <format>` - Choose `text`, `json`, or `markdown`
 - `--save-to <path>` - Save to specific note path (relative to vault)
 - `--append-to <path>` - Append to existing note
-- `-r` - Use research mode with `sonar-reasoning` model
+- `-r` - Use research mode through the central `pp.research` route
 
 ### Examples
 
